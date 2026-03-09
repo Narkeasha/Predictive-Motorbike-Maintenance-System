@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Virtual environment
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# Node
+node_modules/
+dist/
+build/
+
+# ML models
+*.joblib
+*.pkl
+
+# OS
+.DS_Store
+Thumbs.dbget
