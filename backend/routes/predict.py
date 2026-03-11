@@ -14,6 +14,12 @@ from services.tyre_service import predict_tyre
 from schemas.brake_schema import BrakeInput
 from services.brake_service import predict_brakes
 
+
+#chain n sporket 
+from schemas.chain_schema import ChainInput
+from services.chain_service import predict_chain
+
+
 router = APIRouter(prefix="/predict", tags=["Prediction"])
 
 
@@ -28,3 +34,7 @@ def tyre_prediction(data: TyreInput):
 @router.post("/brakes")
 def brake_prediction(data: BrakeInput):
     return predict_brakes(data.model_dump())
+
+@router.post("/chain")
+def chain_prediction(data: ChainInput):
+    return predict_chain(data.model_dump())
