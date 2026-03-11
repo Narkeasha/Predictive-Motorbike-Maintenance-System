@@ -9,6 +9,11 @@ from services.engine_oil_service import predict_engine_oil
 from schemas.tyre_schema import TyreInput
 from services.tyre_service import predict_tyre
 
+
+#brakes 
+from schemas.brake_schema import BrakeInput
+from services.brake_service import predict_brakes
+
 router = APIRouter(prefix="/predict", tags=["Prediction"])
 
 
@@ -19,3 +24,7 @@ def engine_oil_prediction(data: EngineOilInput):
 @router.post("/tyre")
 def tyre_prediction(data: TyreInput):
     return predict_tyre(data.model_dump())
+
+@router.post("/brakes")
+def brake_prediction(data: BrakeInput):
+    return predict_brakes(data.model_dump())
