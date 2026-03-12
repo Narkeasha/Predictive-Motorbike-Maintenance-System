@@ -19,6 +19,14 @@ from services.brake_service import predict_brakes
 from schemas.chain_schema import ChainInput
 from services.chain_service import predict_chain
 
+#brake fluid 
+from schemas.brake_fluid_schema import BrakeFluidInput
+from services.brake_fluid_service import evaluate_brake_fluid_status
+
+#coolant 
+from schemas.coolant_schema import CoolantInput
+from services.coolant_service import evaluate_coolant_status
+
 
 router = APIRouter(prefix="/predict", tags=["Prediction"])
 
@@ -38,3 +46,13 @@ def brake_prediction(data: BrakeInput):
 @router.post("/chain")
 def chain_prediction(data: ChainInput):
     return predict_chain(data.model_dump())
+
+
+@router.post("/brake-fluid")
+def brake_fluid_prediction(data: BrakeFluidInput):
+    return evaluate_brake_fluid_status(data.date_last_brake_fluid_change)
+
+@router.post("/coolant")
+def coolant_prediction(data: CoolantInput):
+    return evaluate_coolant_status(data.date_last_coolant_change)
+    
