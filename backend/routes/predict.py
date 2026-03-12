@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 #engine oil
-from schemas.engine_oil_schema import EngineOilInput
+from schemas.engine_oil_schema import EngineOilInput, EngineOilResponse
 from services.engine_oil_service import predict_engine_oil
 
 
@@ -31,9 +31,9 @@ from services.coolant_service import evaluate_coolant_status
 router = APIRouter(prefix="/predict", tags=["Prediction"])
 
 
-@router.post("/engine-oil")
-def engine_oil_prediction(data: EngineOilInput):
-    return predict_engine_oil(data.model_dump())
+@router.post("/predict/engine-oil", response_model=EngineOilResponse)
+def predict_engine_oil_route(data: EngineOilInput):
+    return predict_engine_oil(data)
 
 @router.post("/tyre")
 def tyre_prediction(data: TyreInput):

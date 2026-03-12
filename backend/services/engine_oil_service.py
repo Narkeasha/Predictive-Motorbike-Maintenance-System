@@ -13,17 +13,20 @@ columns = joblib.load(COLUMNS_PATH)
 
 def predict_engine_oil(data: dict):
 
-    miles = data["miles_since_oil_change"]
+    miles = data.miles_since_oil_change
 
     # safety rule from your notebook
     if miles > 5000:
         return {
             "oil_remaining_miles": 0,
-            "warning": "Oil change overdue (>5000 miles). Seek professional service ASAP."
+            "status": "Critical",
+            "recommendation": "Oil change overdue. Seek professional service as soon as possible."
         }
 
+
+
     # convert input to dataframe
-    input_df = pd.DataFrame([data])
+    input_df = pd.DataFrame([data.model_dump()])
 
     # recreate encoding
     input_df = pd.get_dummies(input_df)
@@ -34,7 +37,30 @@ def predict_engine_oil(data: dict):
     # run model
     prediction = model.predict(input_df)[0]
 
-    return {
-        "oil_remaining_miles": round(float(prediction), 1),
-        "warning": None
-    }
+    # Determine status based on remaining miles
+    if prediction > 1000:
+        status = "Safe"
+        recommendation = "You're good to ride."
+        remaining_to_warning = prediction - 1000
+
+    elif prediction> 300:
+        status = "Warning"
+        recommendation = "Plan a service soon"
+
+    else:
+        status = "Critical"
+        recommendation = "Service ASAP" 
+
+    response = {
+    "oil_remaining_miles": round(prediction, 2),
+    "status": status,
+    "recommendation": recommendation
+    }   
+
+    if status == "Safe":
+        response["remaining_to_warning"] = {
+            "value": round(remaining_to_warning, 2),
+            "unit": "miles"
+        }
+
+    return response
