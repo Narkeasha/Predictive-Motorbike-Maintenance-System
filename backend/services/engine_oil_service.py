@@ -11,19 +11,15 @@ COLUMNS_PATH = BASE_DIR / "models" / "engine_oil_columns.pkl"
 model = joblib.load(MODEL_PATH)
 columns = joblib.load(COLUMNS_PATH)
 
-def predict_engine_oil(data: dict):
-
+def predict_engine_oil(data):
     miles = data.miles_since_oil_change
 
-    # safety rule from your notebook
+    # safety rule from notebook
     if miles > 5000:
         return {
-            "oil_remaining_miles": 0,
             "status": "Critical",
             "recommendation": "Oil change overdue. Seek professional service as soon as possible."
         }
-
-
 
     # convert input to dataframe
     input_df = pd.DataFrame([data.model_dump()])
@@ -37,30 +33,20 @@ def predict_engine_oil(data: dict):
     # run model
     prediction = model.predict(input_df)[0]
 
-    # Determine status based on remaining miles
+    # determine status based on remaining miles
     if prediction > 1000:
         status = "Safe"
-        recommendation = "You're good to ride."
-        remaining_to_warning = prediction - 1000
+        recommendation = "Engine oil looks healthy. You're good to ride for now."
 
-    elif prediction> 300:
+    elif prediction > 300:
         status = "Warning"
-        recommendation = "Plan a service soon"
+        recommendation = "Oil service coming up soon. Plan a change in the next few rides."
 
     else:
         status = "Critical"
-        recommendation = "Service ASAP" 
+        recommendation = "Oil change overdue. Service ASAP to avoid engine damage."
 
-    response = {
-    "oil_remaining_miles": round(prediction, 2),
-    "status": status,
-    "recommendation": recommendation
-    }   
-
-    if status == "Safe":
-        response["remaining_to_warning"] = {
-            "value": round(remaining_to_warning, 2),
-            "unit": "miles"
-        }
-
-    return response
+    return {
+        "status": status,
+        "recommendation": recommendation
+    }

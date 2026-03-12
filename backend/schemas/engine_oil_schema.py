@@ -8,7 +8,7 @@ class EngineOilInput(BaseModel):
 
 
 class EngineOilResponse(BaseModel):
-    oil_remaining_miles: float
     status: str
     recommendation: str
-    remaining_to_warning: Optional[dict] = None
+
+

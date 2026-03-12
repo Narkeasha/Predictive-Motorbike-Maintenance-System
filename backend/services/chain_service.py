@@ -7,35 +7,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 model = joblib.load(BASE_DIR / "models" / "chain_model.pkl")
 columns = joblib.load(BASE_DIR / "models" / "chain_columns.pkl")
 
-def predict_chain(data: dict):
-    mileage = data["miles_since_chain_change"]
 
-    df = pd.DataFrame([data])
+def predict_chain(data):
+    mileage = data.miles_since_chain_change
 
-    # encode categories
+    # safety override
+    if mileage >= 5000:
+        return {
+            "status": "Critical",
+            "recommendation": "Chain likely worn out. Replace immediately to avoid failure."
+        }
+
+    df = pd.DataFrame([data.model_dump()])
     df = pd.get_dummies(df)
-
-    # match training columns
     df = df.reindex(columns=columns, fill_value=0)
 
-    prediction = float(model.predict(df)[0])
+    wear_score = model.predict(df)[0]
 
-    # keep score in sensible range
-    wear_score = max(0, min(100, prediction))
+    # status logic
+    if wear_score < 40:
+        status = "Safe"
+        recommendation = "Chain condition looks good. Keep up regular cleaning and lubrication."
 
-    # threshold conversion from your notebook/report
-    if wear_score < 60:
-        chain_status = "Safe"
-        advice = "Continue regular cleaning and lubrication schedule."
-    elif wear_score < 85:
-        chain_status = "Warning"
-        advice = "Clean and lubricate soon and inspect chain and sprocket."
+    elif wear_score < 70:
+        status = "Warning"
+        recommendation = "Chain wear increasing. Inspect and adjust tension soon."
+
     else:
-        chain_status = "Critical"
-        advice = "Inspect immediately; chain and sprocket replacement likely required."
+        status = "Critical"
+        recommendation = "Chain heavily worn. Replace as soon as possible."
 
     return {
-        "wear_score": round(wear_score, 1),
-        "chain_status": chain_status,
-        "advice": advice
+        "status": status,
+        "recommendation": recommendation
     }
