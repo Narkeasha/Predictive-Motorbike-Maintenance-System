@@ -1,14 +1,26 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routes.predict import router as predict_router
 
-
-#main entry point for the backend server. It creates the FastAPI app and defines a basic root endpoint.
+# Main entry point for the backend server
 app = FastAPI(title="Motorbike Predictive Maintenance API")
 
-#include the predict router which has the /predict endpoint
+# Enable CORS so the React frontend can call the backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-app.include_router(predict_router) #import the predict router from routes/predict.py and include it in the main app so that /predict endpoint is available.
+# Include prediction routes
+app.include_router(predict_router)
 
+# Basic health check endpoint
 @app.get("/")
 def root():
-    return {"message": "API is running"} #basic endpoint to check if server is alive
+    return {"message": "API is running"}
