@@ -1,34 +1,23 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
-
-//state variables ->   what UI remembers
-const API_BASE = "http://127.0.0.1:8000";
-
 export default function App() {
   const [session, setSession] = useState(null);
 
   // auth form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // input payload (dummy for Phase 1)
-  const [milesSinceService, setMilesSinceService] = useState(500);
-  const [ridingStyle, setRidingStyle] = useState("normal");
-
-  // outputs + history
-  const [outputs, setOutputs] = useState(null);
-  const [logs, setLogs] = useState([]);
   const [msg, setMsg] = useState("");
 
-  // on load, gets session and listen for login/logout events
+  // step 2 state
+  const [activePage, setActivePage] = useState("dashboard");
+  const [selectedComponent, setSelectedComponent] = useState("");
+
   useEffect(() => {
-    // Get current session on load
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
     });
 
-    // Listen for auth changes
     const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
     });
@@ -36,188 +25,233 @@ export default function App() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  //signup function that uses supabase auth to create account with email and password
-  //if succesfull may need email comfirmation
   async function signUp() {
     setMsg("");
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) setMsg(error.message);
     else setMsg("Sign-up success. Check your email to confirm (if enabled).");
   }
-//loging via supbase auth 
+
   async function signIn() {
     setMsg("");
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) setMsg(error.message);
-    else setMsg("Signed in.");
-    setSession(data?.session ?? null);
+    else {
+      setMsg("Signed in.");
+      setSession(data?.session ?? null);
+      setActivePage("dashboard");
+    }
   }
 
-  //wipes data whne user loggs out 
   async function signOut() {
     await supabase.auth.signOut();
     setSession(null);
-    setOutputs(null);
-    setLogs([]);
+    setSelectedComponent("");
+    setActivePage("dashboard");
     setMsg("Signed out.");
   }
 
+  const components = [
+    "Engine Oil",
+    "Tyre",
+    "Brakes",
+    "Chain",
+    "Brake Fluid",
+    "Coolant",
+  ];
 
-  //main end-to-end call . clears old messages, checks if user signed in, nuild payload from form,
-  //React → Backend → Save to DB → Return JSON → Show UI 
-  async function runPredict() {
-    setMsg("");
-    setOutputs(null);
-
-    if (!session?.access_token) {
-      setMsg("No session token. Please sign in.");
-      return;
-    }
-
-    const payload = {
-      miles_since_service: Number(milesSinceService),
-      riding_style: ridingStyle,
-    };
-
-    const res = await fetch(`${API_BASE}/predict`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-    if (!res.ok) {
-      setMsg(`Predict failed: ${data?.detail || res.statusText}`);
-      return;
-    }
-
-    setOutputs(data.outputs);
-    setMsg("Prediction saved.");
-    await loadLogs();
-  }
-
-  //fetch history , this si my history view.
-  async function loadLogs() {
-    if (!session?.access_token) return;
-
-    const res = await fetch(`${API_BASE}/logs?limit=10`, {
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-      },
-    });
-
-    const data = await res.json();
-    if (!res.ok) {
-      setMsg(`Logs failed: ${data?.detail || res.statusText}`);
-      return;
-    }
-
-    setLogs(data);
-  }
-
-  // load logs when session becomes available auto load history 
-  useEffect(() => {
-    if (session?.access_token) loadLogs();
-  }, [session]);
-
-  //what appears on screen 
   return (
-    <div style={{ maxWidth: 900, margin: "40px auto", fontFamily: "Arial, sans-serif" }}>
-      <h1>Predictive Motorbike Maintenance System Phase 1  </h1>
+    <div
+      style={{
+        maxWidth: 1200,
+        margin: "40px auto",
+        padding: "0 20px",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <h1>Motorbike Predictive Maintenance System</h1>
 
       {msg && <p><b>Status:</b> {msg}</p>}
 
       {!session ? (
-        <div style={{ border: "1px solid #ddd", padding: 16, borderRadius: 8 }}>
-          <h2>Login / Create Account</h2>
-          <div style={{ display: "grid", gap: 8, maxWidth: 360 }}>
-            <input
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              placeholder="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={signIn}>Sign In</button>
-              <button onClick={signUp}>Sign Up</button>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 24,
+            alignItems: "start",
+          }}
+        >
+          <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+            <h2>Login / Create Account</h2>
+            <div style={{ display: "grid", gap: 12, maxWidth: 360 }}>
+              <input
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div style={{ display: "flex", gap: 10 }}>
+                <button onClick={signIn}>Sign In</button>
+                <button onClick={signUp}>Sign Up</button>
+              </div>
             </div>
+            <p style={{ marginTop: 12, color: "#666" }}>
+              Sign in to access the predictive maintenance dashboard.
+            </p>
           </div>
-          <p style={{ marginTop: 10, color: "#666" }}>
-            (For Phase 1, email confirmation required.)
-          </p>
+
+          <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+            <h2>Welcome</h2>
+            <p>
+              This system helps riders assess the condition of major motorbike components
+              and receive maintenance recommendations before faults become severe.
+            </p>
+            <p>
+              After login, you will be able to access the dashboard, choose a component,
+              and later run maintenance predictions from the frontend.
+            </p>
+          </div>
         </div>
       ) : (
-        <div style={{ display: "grid", gap: 16 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "240px 1fr",
+            gap: 24,
+            alignItems: "start",
+          }}
+        >
+          {/* Sidebar */}
+          <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+            <h2 style={{ marginTop: 0 }}>Navigation</h2>
+
+            <p style={{ fontSize: 14, color: "#555" }}>
               Signed in as <b>{session.user.email}</b>
             </p>
-            <button onClick={signOut}>Sign Out</button>
-          </div>
 
-          <div style={{ border: "1px solid #ddd", padding: 16, borderRadius: 8 }}>
-            <h2>Input Form (Phase 1 Minimal)</h2>
+            <div style={{ display: "grid", gap: 10, marginTop: 20 }}>
+              <button
+                onClick={() => setActivePage("dashboard")}
+                style={{
+                  padding: "10px 12px",
+                  cursor: "pointer",
+                  fontWeight: activePage === "dashboard" ? "bold" : "normal",
+                }}
+              >
+                Dashboard
+              </button>
 
-            <div style={{ display: "grid", gap: 10, maxWidth: 400 }}>
-              <label>
-                Miles since last service:
-                <input
-                  type="number"
-                  value={milesSinceService}
-                  onChange={(e) => setMilesSinceService(e.target.value)}
-                />
-              </label>
+              <button
+                onClick={() => setActivePage("about")}
+                style={{
+                  padding: "10px 12px",
+                  cursor: "pointer",
+                  fontWeight: activePage === "about" ? "bold" : "normal",
+                }}
+              >
+                About Us
+              </button>
 
-              <label>
-                Riding style:
-                <select value={ridingStyle} onChange={(e) => setRidingStyle(e.target.value)}>
-                  <option value="gentle">gentle</option>
-                  <option value="normal">normal</option>
-                  <option value="aggressive">aggressive</option>
-                </select>
-              </label>
-
-              <button onClick={runPredict}>Run Predict (and Save)</button>
-              <button onClick={loadLogs}>Refresh History</button>
+              <button
+                onClick={signOut}
+                style={{ padding: "10px 12px", cursor: "pointer", marginTop: 10 }}
+              >
+                Sign Out
+              </button>
             </div>
           </div>
 
-          <div style={{ border: "1px solid #ddd", padding: 16, borderRadius: 8 }}>
-            <h2>Results</h2>
-            {!outputs ? <p>No prediction yet.</p> : <pre>{JSON.stringify(outputs, null, 2)}</pre>}
-          </div>
+          {/* Main Content */}
+          <div style={{ display: "grid", gap: 16 }}>
+            {activePage === "dashboard" && (
+              <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+                <h2>Dashboard</h2>
+                <p>Select a component to begin the prediction workflow.</p>
 
-          <div style={{ border: "1px solid #ddd", padding: 16, borderRadius: 8 }}>
-            <h2>History (last 10)</h2>
-            {logs.length === 0 ? (
-              <p>No logs yet.</p>
-            ) : (
-              <table width="100%" border="1" cellPadding="6" style={{ borderCollapse: "collapse" }}>
-                <thead>
-                  <tr>
-                    <th>created_at</th>
-                    <th>inputs</th>
-                    <th>outputs</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {logs.map((row) => (
-                    <tr key={row.id}>
-                      <td>{row.created_at}</td>
-                      <td><pre style={{ margin: 0 }}>{JSON.stringify(row.inputs, null, 2)}</pre></td>
-                      <td><pre style={{ margin: 0 }}>{JSON.stringify(row.outputs, null, 2)}</pre></td>
-                    </tr>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                    gap: 12,
+                    marginTop: 20,
+                  }}
+                >
+                  {components.map((component) => (
+                    <button
+                      key={component}
+                      onClick={() => setSelectedComponent(component)}
+                      style={{
+                        padding: "16px",
+                        borderRadius: 8,
+                        border: "1px solid #ccc",
+                        background: selectedComponent === component ? "#e8f0fe" : "#fff",
+                        cursor: "pointer",
+                        fontWeight: selectedComponent === component ? "bold" : "normal",
+                      }}
+                    >
+                      {component}
+                    </button>
                   ))}
-                </tbody>
-              </table>
+                </div>
+
+                <div style={{ marginTop: 24 }}>
+                  {!selectedComponent ? (
+                    <p>No component selected yet.</p>
+                  ) : (
+                    <div
+                      style={{
+                        border: "1px solid #ddd",
+                        borderRadius: 8,
+                        padding: 16,
+                        background: "#fafafa",
+                      }}
+                    >
+                      <h3 style={{ marginTop: 0 }}>{selectedComponent}</h3>
+                      <p>
+                        This component has been selected successfully.
+                      </p>
+                      <p>
+                        The prediction form for <b>{selectedComponent}</b> will be added in the next step.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activePage === "about" && (
+              <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+                <h2>About Us</h2>
+                <p>
+                  The Motorbike Predictive Maintenance System is designed to support riders
+                  in identifying potential maintenance issues before they become critical.
+                </p>
+                <p>
+                  The system combines machine learning models and rule-based logic to assess
+                  the condition of important motorbike components and return simple maintenance
+                  guidance through the frontend interface.
+                </p>
+                <p>The system supports prediction and maintenance recommendations for:</p>
+                <ul>
+                  <li>Engine Oil</li>
+                  <li>Tyre</li>
+                  <li>Brakes</li>
+                  <li>Chain</li>
+                  <li>Brake Fluid</li>
+                  <li>Coolant</li>
+                </ul>
+                <p>
+                  The main goal of the system is to provide users with an accessible way to
+                  enter maintenance-related data and receive a clear result in the form of:
+                  <b> Safe</b>, <b>Warning</b>, or <b>Critical</b>.
+                </p>
+              </div>
             )}
           </div>
         </div>
