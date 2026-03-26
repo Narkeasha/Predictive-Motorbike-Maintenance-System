@@ -188,7 +188,7 @@ export default function App() {
         <div className="page-card">
           <h2 className="section-title">Logged History</h2>
           <p className="section-subtitle">
-            Prediction history will be added in Phase 5.
+            Prediction history will be added sooonnn.
           </p>
         </div>
       );
@@ -197,7 +197,7 @@ export default function App() {
     if (activePage === "contact") {
       return (
         <div className="page-card">
-          <h2 className="section-title">Contact Us</h2>
+          <h2 className="section-title">Support</h2>
           <p className="section-subtitle">
             Support and contact details can be added here during final refinement.
           </p>

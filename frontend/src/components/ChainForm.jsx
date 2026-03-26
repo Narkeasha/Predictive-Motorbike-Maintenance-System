@@ -33,70 +33,74 @@ export default function ChainForm({ onBack }) {
   }
 
   return (
-    <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
-      <h2>Chain Prediction</h2>
-      <p>Enter chain maintenance details to receive a prediction.</p>
+    <div className="page-card prediction-form-card">
+      <div className="prediction-form-header">
+        <p className="eyebrow">Prediction</p>
+        <h2 className="section-title">Chain Prediction</h2>
+        <p className="section-subtitle">
+          Enter chain maintenance details to receive a prediction.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 14, maxWidth: 500 }}>
-        <label>
-          Miles since chain change:
+      <form onSubmit={handleSubmit} className="prediction-form">
+        <div className="prediction-field">
+          <label htmlFor="milesSinceChainChange">Miles since chain change</label>
           <input
+            id="milesSinceChainChange"
+            className="prediction-input"
             type="number"
             value={milesSinceChainChange}
             onChange={(e) => setMilesSinceChainChange(e.target.value)}
             required
-            style={{ width: "100%", marginTop: 6, padding: 8 }}
           />
-        </label>
+        </div>
 
-        <label>
-          Weather exposure:
+        <div className="prediction-field">
+          <label htmlFor="weatherExposure">Weather exposure</label>
           <select
+            id="weatherExposure"
+            className="prediction-select"
             value={weatherExposure}
             onChange={(e) => setWeatherExposure(e.target.value)}
-            style={{ width: "100%", marginTop: 6, padding: 8 }}
           >
             <option value="low">low</option>
             <option value="medium">medium</option>
             <option value="high">high</option>
           </select>
-        </label>
+        </div>
 
-        <label>
-          Maintenance frequency:
+        <div className="prediction-field">
+          <label htmlFor="maintenanceFrequency">Maintenance frequency</label>
           <select
+            id="maintenanceFrequency"
+            className="prediction-select"
             value={maintenanceFrequency}
             onChange={(e) => setMaintenanceFrequency(e.target.value)}
-            style={{ width: "100%", marginTop: 6, padding: 8 }}
           >
             <option value="regular">regular</option>
             <option value="occasional">occasional</option>
             <option value="rare">rare</option>
           </select>
-        </label>
+        </div>
 
-        <div style={{ display: "flex", gap: 10 }}>
-          <button type="submit" disabled={loading}>
+        <div className="prediction-actions">
+          <button className="primary-button" type="submit" disabled={loading}>
             {loading ? "Predicting..." : "Predict"}
           </button>
 
-          <button type="button" onClick={onBack}>
+          <button
+            className="secondary-action-button"
+            type="button"
+            onClick={onBack}
+          >
             Back
           </button>
         </div>
       </form>
 
       {error && (
-        <div
-          style={{
-            marginTop: 20,
-            border: "1px solid #f5c2c7",
-            background: "#f8d7da",
-            padding: 12,
-            borderRadius: 8,
-          }}
-        >
-          <b>Error:</b> {error}
+        <div className="form-error">
+          <strong>Error:</strong> {error}
         </div>
       )}
 

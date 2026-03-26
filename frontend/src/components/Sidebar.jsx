@@ -41,11 +41,11 @@ export default function Sidebar({
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <div className="brand-badge">MP</div>
+        <div className="brand-badge">nk</div>
         <div>
-          <h2 className="sidebar-title">Maintenance App</h2>
+          <h2 className="sidebar-title">PMMS</h2>
           <p className="sidebar-subtitle">
-            {isAuthenticated ? "User workspace" : "Public navigation"}
+            {isAuthenticated ? "Overview" : "Public navigation"}
           </p>
         </div>
       </div>
@@ -71,21 +71,21 @@ export default function Sidebar({
               className={`nav-button ${activePage === "history" ? "active" : ""}`}
               onClick={() => goTo("history")}
             >
-              Logged History
+              History
             </button>
 
             <button
               className={`nav-button ${activePage === "contact" ? "active" : ""}`}
               onClick={() => goTo("contact")}
             >
-              Contact Us
+              Support 
             </button>
 
             <button
               className={`nav-button ${activePage === "about" ? "active" : ""}`}
               onClick={() => goTo("about")}
             >
-              About Us
+              About
             </button>
           </nav>
 
@@ -102,7 +102,7 @@ export default function Sidebar({
           </button>
 
           <button className="nav-button" onClick={() => goTo("about")}>
-            About Us
+            About 
           </button>
         </nav>
       )}

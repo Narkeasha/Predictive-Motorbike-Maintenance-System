@@ -33,69 +33,74 @@ export default function EngineOilForm({ onBack }) {
   }
 
   return (
-    <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
-      <h2>Engine Oil Prediction</h2>
-      <p>Enter engine oil maintenance details to receive a prediction.</p>
+    <div className="page-card prediction-form-card">
+      <div className="prediction-form-header">
+        <p className="eyebrow">Prediction</p>
+        <h2 className="section-title">Engine Oil Prediction</h2>
+        <p className="section-subtitle">
+          Enter engine oil maintenance details to receive a prediction.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 14, maxWidth: 500 }}>
-        <label>
-          Miles since oil change:
+      <form onSubmit={handleSubmit} className="prediction-form">
+        <div className="prediction-field">
+          <label htmlFor="milesSinceOilChange">Miles since oil change</label>
           <input
+            id="milesSinceOilChange"
+            className="prediction-input"
             type="number"
             value={milesSinceOilChange}
             onChange={(e) => setMilesSinceOilChange(e.target.value)}
             required
-            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
           />
-        </label>
+        </div>
 
-        <label>
-          Trip type:
+        <div className="prediction-field">
+          <label htmlFor="tripType">Trip type</label>
           <select
+            id="tripType"
+            className="prediction-select"
             value={tripType}
             onChange={(e) => setTripType(e.target.value)}
-            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
           >
             <option value="short">short</option>
             <option value="mixed">mixed</option>
             <option value="long">long</option>
           </select>
-        </label>
+        </div>
 
-        <label>
-          Riding style:
+        <div className="prediction-field">
+          <label htmlFor="ridingStyle">Riding style</label>
           <select
+            id="ridingStyle"
+            className="prediction-select"
             value={ridingStyle}
             onChange={(e) => setRidingStyle(e.target.value)}
-            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
           >
             <option value="gentle">gentle</option>
             <option value="normal">normal</option>
             <option value="aggressive">aggressive</option>
           </select>
-        </label>
+        </div>
 
-        <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
-          <button type="submit" disabled={loading}>
+        <div className="prediction-actions">
+          <button className="primary-button" type="submit" disabled={loading}>
             {loading ? "Predicting..." : "Predict"}
           </button>
-          <button type="button" onClick={onBack}>
+
+          <button
+            className="secondary-action-button"
+            type="button"
+            onClick={onBack}
+          >
             Back
           </button>
         </div>
       </form>
 
       {error && (
-        <div
-          style={{
-            marginTop: 20,
-            border: "1px solid #f5c2c7",
-            background: "#f8d7da",
-            padding: 12,
-            borderRadius: 8,
-          }}
-        >
-          <b>Error:</b> {error}
+        <div className="form-error">
+          <strong>Error:</strong> {error}
         </div>
       )}
 

@@ -8,13 +8,11 @@ export default function LandingPage({
       <section id="home-section" className="page-card landing-card">
         <section className="hero-section">
           <h2 className="hero-title">
-            Smarter motorbike maintenance, made simple.
+            Stay on top of your bike’s health before issues happen 
           </h2>
 
           <p className="hero-subtitle">
-            Monitor key bike components, submit maintenance-related inputs, and
-            receive clear condition predictions with practical maintenance
-            recommendations.
+            Track your motorbike usage and receive personalised predictions for when key components need attention, helping you avoid breakdowns and stay safe.
           </p>
         </section>
 
@@ -50,8 +48,7 @@ export default function LandingPage({
         <h2 className="section-title">About Us</h2>
 
         <p className="section-subtitle">
-            The Predictive Motorbike Maintenance System is designed to make motorcycle
-            maintenance simpler, smarter, and more accessible for everyday riders.
+           This system was developed to make maintenance easier to manage. Instead of using fixed intervals or requiring expensive sensors, it uses your riding data to estimate when key components may need attention.
         </p>
 
         <div className="content-stack">
@@ -62,20 +59,24 @@ export default function LandingPage({
             guidance on when key components may need attention — helping you save money
             and ride more safely.
             </p>
-
+    
             <h3 className="section-title">What We Do</h3>
             <p>
             Our platform uses your riding data to estimate wear on important components
             such as:
             </p>
-            <ul className="feature-list">
-            <li>Engine oil</li>
-            <li>Tyres</li>
-            <li>Chain and sprockets</li>
+            <ul>
+                <li>Engine Oil</li>
+                <li>Tyre</li>
+                <li>Brakes</li>
+                <li>Chain</li>
+                <li>Brake Fluid</li>
+                <li>Coolant</li>
             </ul>
             <p>
-            Instead of relying on fixed schedules or expensive sensors, we provide
-            simple, data-driven insights that adapt to how you actually use your bike.
+                The main goal of the system is to provide users with an accessible way to
+                enter maintenance-related data and receive a clear result in the form of:
+                <b> Safe</b>, <b>Warning</b>, or <b>Critical</b>.
             </p>
 
             <h3 className="section-title">Who It’s For</h3>
@@ -88,19 +89,14 @@ export default function LandingPage({
             easier to understand and manage.
             </p>
 
+
             <h3 className="section-title">Important Notice</h3>
             <p>
             This system is designed to provide guidance and estimates only. It should
             not replace professional mechanical advice or regular safety checks.
             </p>
 
-            <h3 className="section-title">About the Project</h3>
-            <p>
-            This system was developed as part of a final-year project, combining
-            concepts from data science, machine learning, and web development to
-            explore practical solutions for real-world motorcycle maintenance
-            challenges.
-            </p>
+
         </div>
         </section>
     </div>
