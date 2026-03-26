@@ -10,9 +10,9 @@ export default function Sidebar({
   function goTo(page) {
     if (!isAuthenticated) {
       setActivePage("home");
+      setShowAuth(false);
 
       if (page === "home") {
-        setShowAuth(false);
         setTimeout(() => {
           document
             .getElementById("home-section")
@@ -21,7 +21,6 @@ export default function Sidebar({
       }
 
       if (page === "about") {
-        setShowAuth(false);
         setTimeout(() => {
           document
             .getElementById("about-section")

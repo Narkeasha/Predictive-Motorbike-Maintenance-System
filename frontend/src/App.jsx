@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 import "./App.css";
 
-import AuthForm from "./components/authform";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/dashboard";
 import AboutPage from "./components/aboutpage";
 import LandingPage from "./components/LandingPage";
+import AuthForm from "./components/authform";
 
 import EngineOilForm from "./components/EngineOilForm";
 import TyreForm from "./components/TyreForm";
@@ -119,6 +119,12 @@ export default function App() {
     setActivePage("dashboard");
   }
 
+  function handleBackFromAuth() {
+    setShowAuth(false);
+    setPendingComponent("");
+    setMsg("");
+  }
+
   function renderSelectedComponentForm() {
     if (selectedComponent === "Engine Oil") {
       return <EngineOilForm onBack={handleBackToDashboard} />;
@@ -148,27 +154,29 @@ export default function App() {
   }
 
   function renderPublicContent() {
-  return (
-    <LandingPage
-      components={components}
-      onSelectComponent={handlePublicComponentSelect}
-      onGetStarted={handleGetStarted}
-      showAuth={showAuth}
-      email={email}
-      password={password}
-      setEmail={setEmail}
-      setPassword={setPassword}
-      signIn={signIn}
-      signUp={signUp}
-      pendingComponent={pendingComponent}
-      onBackFromAuth={() => {
-        setShowAuth(false);
-        setPendingComponent("");
-        setMsg("");
-      }}
-    />
-  );
-}
+    if (showAuth) {
+      return (
+        <AuthForm
+          email={email}
+          password={password}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          signIn={signIn}
+          signUp={signUp}
+          onBack={handleBackFromAuth}
+          pendingComponent={pendingComponent}
+        />
+      );
+    }
+
+    return (
+      <LandingPage
+        components={components}
+        onSelectComponent={handlePublicComponentSelect}
+        onGetStarted={handleGetStarted}
+      />
+    );
+  }
 
   function renderPrivateContent() {
     if (activePage === "about") {
@@ -224,10 +232,30 @@ export default function App() {
         />
 
         <main className="main-content">
-          <div className="page-header">
-            <p className="eyebrow">Motorbike Predictive Maintenance Platform</p>
-            <h1 className="app-title">Motorbike Predictive Maintenance System</h1>
-            {msg && <p className="status-message">{msg}</p>}
+          <div className="page-topbar">
+            <div className="page-header">
+              <p className="eyebrow">Motorbike Predictive Maintenance Platform</p>
+              <h1 className="app-title">Motorbike Predictive Maintenance System</h1>
+              {msg && <p className="status-message">{msg}</p>}
+            </div>
+
+            <div className="topbar-account">
+              {!session ? (
+                <button
+                  className="secondary-button topbar-signin"
+                  onClick={handleGetStarted}
+                >
+                  Sign In
+                </button>
+              ) : (
+                <div className="signed-in-badge">
+                  <span className="signed-in-label">Signed in as</span>
+                  <strong className="signed-in-email">
+                    {session?.user?.email}
+                  </strong>
+                </div>
+              )}
+            </div>
           </div>
 
           {session ? renderPrivateContent() : renderPublicContent()}

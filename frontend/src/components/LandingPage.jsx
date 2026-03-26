@@ -1,18 +1,7 @@
-import AuthForm from "./authform";
-
 export default function LandingPage({
   components,
   onSelectComponent,
   onGetStarted,
-  showAuth,
-  email,
-  password,
-  setEmail,
-  setPassword,
-  signIn,
-  signUp,
-  pendingComponent,
-  onBackFromAuth,
 }) {
   return (
     <div className="landing-stack">
@@ -55,55 +44,65 @@ export default function LandingPage({
           </div>
         </section>
       </section>
-
-      {showAuth && (
-        <AuthForm
-          email={email}
-          password={password}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          signIn={signIn}
-          signUp={signUp}
-          onBack={onBackFromAuth}
-          pendingComponent={pendingComponent}
-        />
-      )}
-
+      
       <section id="about-section" className="page-card">
         <p className="eyebrow">About</p>
-        <h2 className="section-title">About the system</h2>
+        <h2 className="section-title">About Us</h2>
 
         <p className="section-subtitle">
-          The Motorbike Predictive Maintenance System is designed to help riders
-          assess the condition of major motorbike components before faults become
-          severe.
+            The Predictive Motorbike Maintenance System is designed to make motorcycle
+            maintenance simpler, smarter, and more accessible for everyday riders.
         </p>
 
         <div className="content-stack">
-          <p>
-            The system combines machine learning models and rule-based logic to
-            evaluate maintenance-related input data and return a standardised
-            result in the form of a maintenance status and recommendation.
-          </p>
+            <p>
+            We aim to solve a common problem: many riders struggle to keep track of
+            maintenance, which can lead to costly repairs or even safety risks. Our
+            system helps you stay on top of your motorbike’s condition by providing
+            guidance on when key components may need attention — helping you save money
+            and ride more safely.
+            </p>
 
-          <p>The platform currently supports predictions for:</p>
+            <h3 className="section-title">What We Do</h3>
+            <p>
+            Our platform uses your riding data to estimate wear on important components
+            such as:
+            </p>
+            <ul className="feature-list">
+            <li>Engine oil</li>
+            <li>Tyres</li>
+            <li>Chain and sprockets</li>
+            </ul>
+            <p>
+            Instead of relying on fixed schedules or expensive sensors, we provide
+            simple, data-driven insights that adapt to how you actually use your bike.
+            </p>
 
-          <ul className="feature-list">
-            <li>Engine Oil</li>
-            <li>Tyre</li>
-            <li>Brakes</li>
-            <li>Chain</li>
-            <li>Brake Fluid</li>
-            <li>Coolant</li>
-          </ul>
+            <h3 className="section-title">Who It’s For</h3>
+            <ul className="feature-list">
+            <li>Everyday commuters who rely on their bike daily</li>
+            <li>Motorcycle enthusiasts who want better insight into their bike’s condition</li>
+            </ul>
+            <p>
+            Whether you ride casually or frequently, the goal is to make maintenance
+            easier to understand and manage.
+            </p>
 
-          <p>
-            The frontend is intentionally designed around a stable response
-            format so backend logic can be refined later without changing the
-            overall user interface structure.
-          </p>
+            <h3 className="section-title">Important Notice</h3>
+            <p>
+            This system is designed to provide guidance and estimates only. It should
+            not replace professional mechanical advice or regular safety checks.
+            </p>
+
+            <h3 className="section-title">About the Project</h3>
+            <p>
+            This system was developed as part of a final-year project, combining
+            concepts from data science, machine learning, and web development to
+            explore practical solutions for real-world motorcycle maintenance
+            challenges.
+            </p>
         </div>
-      </section>
+        </section>
     </div>
   );
 }
