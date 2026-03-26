@@ -148,37 +148,27 @@ export default function App() {
   }
 
   function renderPublicContent() {
-    if (activePage === "about") {
-      return <AboutPage />;
-    }
-
-    if (showAuth) {
-      return (
-        <AuthForm
-          email={email}
-          password={password}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          signIn={signIn}
-          signUp={signUp}
-          onBack={() => {
-            setShowAuth(false);
-            setPendingComponent("");
-            setMsg("");
-          }}
-          pendingComponent={pendingComponent}
-        />
-      );
-    }
-
-    return (
-      <LandingPage
-        components={components}
-        onSelectComponent={handlePublicComponentSelect}
-        onGetStarted={handleGetStarted}
-      />
-    );
-  }
+  return (
+    <LandingPage
+      components={components}
+      onSelectComponent={handlePublicComponentSelect}
+      onGetStarted={handleGetStarted}
+      showAuth={showAuth}
+      email={email}
+      password={password}
+      setEmail={setEmail}
+      setPassword={setPassword}
+      signIn={signIn}
+      signUp={signUp}
+      pendingComponent={pendingComponent}
+      onBackFromAuth={() => {
+        setShowAuth(false);
+        setPendingComponent("");
+        setMsg("");
+      }}
+    />
+  );
+}
 
   function renderPrivateContent() {
     if (activePage === "about") {
@@ -221,26 +211,28 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
-      <Sidebar
-        isAuthenticated={!!session}
-        userEmail={session?.user?.email ?? ""}
-        activePage={activePage}
-        setActivePage={setActivePage}
-        signOut={signOut}
-        setShowAuth={setShowAuth}
-        setSelectedComponent={setSelectedComponent}
-      />
+    <div className="app-page">
+      <div className="app-frame">
+        <Sidebar
+          isAuthenticated={!!session}
+          userEmail={session?.user?.email ?? ""}
+          activePage={activePage}
+          setActivePage={setActivePage}
+          signOut={signOut}
+          setShowAuth={setShowAuth}
+          setSelectedComponent={setSelectedComponent}
+        />
 
-      <main className="main-content">
-        <div className="page-header">
-          <p className="eyebrow">Motorbike Predictive Maintenance Platform</p>
-          <h1 className="app-title">Motorbike Predictive Maintenance System</h1>
-          {msg && <p className="status-message">{msg}</p>}
-        </div>
+        <main className="main-content">
+          <div className="page-header">
+            <p className="eyebrow">Motorbike Predictive Maintenance Platform</p>
+            <h1 className="app-title">Motorbike Predictive Maintenance System</h1>
+            {msg && <p className="status-message">{msg}</p>}
+          </div>
 
-        {session ? renderPrivateContent() : renderPublicContent()}
-      </main>
+          {session ? renderPrivateContent() : renderPublicContent()}
+        </main>
+      </div>
     </div>
   );
 }

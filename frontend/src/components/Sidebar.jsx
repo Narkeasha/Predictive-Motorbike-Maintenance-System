@@ -8,14 +8,34 @@ export default function Sidebar({
   setSelectedComponent,
 }) {
   function goTo(page) {
+    if (!isAuthenticated) {
+      setActivePage("home");
+
+      if (page === "home") {
+        setShowAuth(false);
+        setTimeout(() => {
+          document
+            .getElementById("home-section")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+      }
+
+      if (page === "about") {
+        setShowAuth(false);
+        setTimeout(() => {
+          document
+            .getElementById("about-section")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+      }
+
+      return;
+    }
+
     setActivePage(page);
 
     if (page !== "dashboard" && setSelectedComponent) {
       setSelectedComponent("");
-    }
-
-    if (!isAuthenticated && page !== "about" && setShowAuth) {
-      setShowAuth(false);
     }
   }
 
@@ -31,13 +51,15 @@ export default function Sidebar({
         </div>
       </div>
 
+      {isAuthenticated && (
+        <div className="sidebar-user">
+          <span className="sidebar-user-label">Signed in as</span>
+          <strong className="sidebar-user-email">{userEmail}</strong>
+        </div>
+      )}
+
       {isAuthenticated ? (
         <>
-          <div className="sidebar-user">
-            <span className="sidebar-user-label">Signed in as</span>
-            <strong className="sidebar-user-email">{userEmail}</strong>
-          </div>
-
           <nav className="sidebar-nav">
             <button
               className={`nav-button ${activePage === "dashboard" ? "active" : ""}`}
@@ -75,16 +97,15 @@ export default function Sidebar({
           </div>
         </>
       ) : (
-        <>
-          <nav className="sidebar-nav">
-            <button
-              className={`nav-button ${activePage === "about" ? "active" : ""}`}
-              onClick={() => goTo("about")}
-            >
-              About Us
-            </button>
-          </nav>
-        </>
+        <nav className="sidebar-nav">
+          <button className="nav-button" onClick={() => goTo("home")}>
+            Home
+          </button>
+
+          <button className="nav-button" onClick={() => goTo("about")}>
+            About Us
+          </button>
+        </nav>
       )}
     </aside>
   );
