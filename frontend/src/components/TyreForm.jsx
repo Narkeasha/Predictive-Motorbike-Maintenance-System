@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { predictEngineOil } from "../services/api";
+import { predictTyre } from "../services/api";
 import PredictionResult from "./PredictionResult";
 
-export default function EngineOilForm({ onBack }) {
-  const [milesSinceOilChange, setMilesSinceOilChange] = useState("");
-  const [tripType, setTripType] = useState("mixed");
+export default function TyreForm({ onBack }) {
+  const [mileageSinceTyreChange, setMileageSinceTyreChange] = useState("");
   const [ridingStyle, setRidingStyle] = useState("normal");
+  const [roadType, setRoadType] = useState("city");
 
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,10 +18,10 @@ export default function EngineOilForm({ onBack }) {
     setResult(null);
 
     try {
-      const response = await predictEngineOil({
-        miles_since_oil_change: Number(milesSinceOilChange),
-        trip_type: tripType,
+      const response = await predictTyre({
+        mileage_since_tyre_change: Number(mileageSinceTyreChange),
         riding_style: ridingStyle,
+        road_type: roadType,
       });
 
       setResult(response);
@@ -34,32 +34,19 @@ export default function EngineOilForm({ onBack }) {
 
   return (
     <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
-      <h2>Engine Oil Prediction</h2>
-      <p>Enter engine oil maintenance details to receive a prediction.</p>
+      <h2>Tyre Prediction</h2>
+      <p>Enter tyre maintenance details to receive a prediction.</p>
 
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: 14, maxWidth: 500 }}>
         <label>
-          Miles since oil change:
+          Mileage since tyre change:
           <input
             type="number"
-            value={milesSinceOilChange}
-            onChange={(e) => setMilesSinceOilChange(e.target.value)}
+            value={mileageSinceTyreChange}
+            onChange={(e) => setMileageSinceTyreChange(e.target.value)}
             required
             style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
           />
-        </label>
-
-        <label>
-          Trip type:
-          <select
-            value={tripType}
-            onChange={(e) => setTripType(e.target.value)}
-            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
-          >
-            <option value="short">short</option>
-            <option value="mixed">mixed</option>
-            <option value="long">long</option>
-          </select>
         </label>
 
         <label>
@@ -72,6 +59,19 @@ export default function EngineOilForm({ onBack }) {
             <option value="gentle">gentle</option>
             <option value="normal">normal</option>
             <option value="aggressive">aggressive</option>
+          </select>
+        </label>
+
+        <label>
+          Road type:
+          <select
+            value={roadType}
+            onChange={(e) => setRoadType(e.target.value)}
+            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
+          >
+            <option value="city">city</option>
+            <option value="highway">highway</option>
+            <option value="rough">rough</option>
           </select>
         </label>
 

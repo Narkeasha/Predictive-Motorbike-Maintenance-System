@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { predictEngineOil } from "../services/api";
+import { predictBrakes } from "../services/api";
 import PredictionResult from "./PredictionResult";
 
-export default function EngineOilForm({ onBack }) {
-  const [milesSinceOilChange, setMilesSinceOilChange] = useState("");
-  const [tripType, setTripType] = useState("mixed");
+export default function BrakesForm({ onBack }) {
+  const [milesSincePadChange, setMilesSincePadChange] = useState("");
   const [ridingStyle, setRidingStyle] = useState("normal");
+  const [cityRiding, setCityRiding] = useState("medium");
 
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,10 +18,10 @@ export default function EngineOilForm({ onBack }) {
     setResult(null);
 
     try {
-      const response = await predictEngineOil({
-        miles_since_oil_change: Number(milesSinceOilChange),
-        trip_type: tripType,
+      const response = await predictBrakes({
+        miles_since_pad_change: Number(milesSincePadChange),
         riding_style: ridingStyle,
+        city_riding: cityRiding,
       });
 
       setResult(response);
@@ -34,32 +34,19 @@ export default function EngineOilForm({ onBack }) {
 
   return (
     <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
-      <h2>Engine Oil Prediction</h2>
-      <p>Enter engine oil maintenance details to receive a prediction.</p>
+      <h2>Brake System Prediction</h2>
+      <p>Enter brake maintenance details to receive a prediction.</p>
 
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: 14, maxWidth: 500 }}>
         <label>
-          Miles since oil change:
+          Miles since pad change:
           <input
             type="number"
-            value={milesSinceOilChange}
-            onChange={(e) => setMilesSinceOilChange(e.target.value)}
+            value={milesSincePadChange}
+            onChange={(e) => setMilesSincePadChange(e.target.value)}
             required
-            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
+            style={{ width: "100%", marginTop: 6, padding: 8 }}
           />
-        </label>
-
-        <label>
-          Trip type:
-          <select
-            value={tripType}
-            onChange={(e) => setTripType(e.target.value)}
-            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
-          >
-            <option value="short">short</option>
-            <option value="mixed">mixed</option>
-            <option value="long">long</option>
-          </select>
         </label>
 
         <label>
@@ -67,7 +54,7 @@ export default function EngineOilForm({ onBack }) {
           <select
             value={ridingStyle}
             onChange={(e) => setRidingStyle(e.target.value)}
-            style={{ display: "block", width: "100%", marginTop: 6, padding: 8 }}
+            style={{ width: "100%", marginTop: 6, padding: 8 }}
           >
             <option value="gentle">gentle</option>
             <option value="normal">normal</option>
@@ -75,10 +62,24 @@ export default function EngineOilForm({ onBack }) {
           </select>
         </label>
 
-        <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+        <label>
+          City riding:
+          <select
+            value={cityRiding}
+            onChange={(e) => setCityRiding(e.target.value)}
+            style={{ width: "100%", marginTop: 6, padding: 8 }}
+          >
+            <option value="low">low</option>
+            <option value="medium">medium</option>
+            <option value="high">high</option>
+          </select>
+        </label>
+
+        <div style={{ display: "flex", gap: 10 }}>
           <button type="submit" disabled={loading}>
             {loading ? "Predicting..." : "Predict"}
           </button>
+
           <button type="button" onClick={onBack}>
             Back
           </button>

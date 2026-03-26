@@ -73,11 +73,13 @@ export async function predictBrakeFluid(data) {
     body: JSON.stringify(data),
   });
 
+  const result = await res.json();
+
   if (!res.ok) {
-    throw new Error("Brake fluid prediction failed");
+    throw new Error(result?.detail ? JSON.stringify(result.detail) : "Brake fluid prediction failed");
   }
 
-  return res.json();
+  return result;
 }
 
 export async function predictCoolant(data) {
@@ -89,9 +91,13 @@ export async function predictCoolant(data) {
     body: JSON.stringify(data),
   });
 
+  const result = await res.json();
+
   if (!res.ok) {
-    throw new Error("Coolant prediction failed");
+    throw new Error(
+      result?.detail ? JSON.stringify(result.detail) : "Coolant prediction failed"
+    );
   }
 
-  return res.json();
+  return result;
 }

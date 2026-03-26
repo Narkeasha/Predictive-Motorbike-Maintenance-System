@@ -5,6 +5,12 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/dashboard";
 import AboutPage from "./components/aboutpage";
 import EngineOilForm from "./components/EngineOilForm";
+import TyreForm from "./components/TyreForm";
+import BrakesForm from "./components/BrakesForm";
+import ChainForm from "./components/ChainForm";
+import BrakeFluidForm from "./components/BrakeFluidForm";
+import CoolantForm from "./components/CoolantForm";
+
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -72,28 +78,46 @@ export default function App() {
   ];
 
   function renderMainContent() {
-    if (activePage === "about") {
-      return <AboutPage />;
-    }
-
-    if (activePage === "dashboard") {
-      if (selectedComponent === "Engine Oil") {
-        return (
-          <EngineOilForm onBack={() => setSelectedComponent("")} />
-        );
-      }
-
-      return (
-        <Dashboard
-          components={components}
-          selectedComponent={selectedComponent}
-          setSelectedComponent={setSelectedComponent}
-        />
-      );
-    }
-
-    return null;
+  if (activePage === "about") {
+    return <AboutPage />;
   }
+
+  if (activePage === "dashboard") {
+    if (selectedComponent === "Engine Oil") {
+      return <EngineOilForm onBack={() => setSelectedComponent("")} />;
+    }
+
+    if (selectedComponent === "Tyre") {
+      return <TyreForm onBack={() => setSelectedComponent("")} />;
+    }
+
+    if (selectedComponent === "Brakes") {
+      return <BrakesForm onBack={() => setSelectedComponent("")} />;
+    }
+
+    if (selectedComponent === "Chain") {
+      return <ChainForm onBack={() => setSelectedComponent("")} />;
+    }
+
+    if (selectedComponent === "Brake Fluid") {
+      return <BrakeFluidForm onBack={() => setSelectedComponent("")} />;
+    }
+    
+    if (selectedComponent === "Coolant") {
+      return <CoolantForm onBack={() => setSelectedComponent("")} />;
+    }
+
+    return (
+      <Dashboard
+        components={components}
+        selectedComponent={selectedComponent}
+        setSelectedComponent={setSelectedComponent}
+      />
+    );
+  }
+
+  return null;
+}
 
   return (
     <div
