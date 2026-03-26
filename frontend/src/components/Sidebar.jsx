@@ -1,47 +1,91 @@
 export default function Sidebar({
+  isAuthenticated,
   userEmail,
   activePage,
   setActivePage,
   signOut,
+  setShowAuth,
+  setSelectedComponent,
 }) {
+  function goTo(page) {
+    setActivePage(page);
+
+    if (page !== "dashboard" && setSelectedComponent) {
+      setSelectedComponent("");
+    }
+
+    if (!isAuthenticated && page !== "about" && setShowAuth) {
+      setShowAuth(false);
+    }
+  }
+
   return (
-    <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
-      <h2 style={{ marginTop: 0 }}>Navigation</h2>
-
-      <p style={{ fontSize: 14, color: "#555" }}>
-        Signed in as <b>{userEmail}</b>
-      </p>
-
-      <div style={{ display: "grid", gap: 10, marginTop: 20 }}>
-        <button
-          onClick={() => setActivePage("dashboard")}
-          style={{
-            padding: "10px 12px",
-            cursor: "pointer",
-            fontWeight: activePage === "dashboard" ? "bold" : "normal",
-          }}
-        >
-          Dashboard
-        </button>
-
-        <button
-          onClick={() => setActivePage("about")}
-          style={{
-            padding: "10px 12px",
-            cursor: "pointer",
-            fontWeight: activePage === "about" ? "bold" : "normal",
-          }}
-        >
-          About Us
-        </button>
-
-        <button
-          onClick={signOut}
-          style={{ padding: "10px 12px", cursor: "pointer", marginTop: 10 }}
-        >
-          Sign Out
-        </button>
+    <aside className="sidebar">
+      <div className="sidebar-brand">
+        <div className="brand-badge">MP</div>
+        <div>
+          <h2 className="sidebar-title">Maintenance App</h2>
+          <p className="sidebar-subtitle">
+            {isAuthenticated ? "User workspace" : "Public navigation"}
+          </p>
+        </div>
       </div>
-    </div>
+
+      {isAuthenticated ? (
+        <>
+          <div className="sidebar-user">
+            <span className="sidebar-user-label">Signed in as</span>
+            <strong className="sidebar-user-email">{userEmail}</strong>
+          </div>
+
+          <nav className="sidebar-nav">
+            <button
+              className={`nav-button ${activePage === "dashboard" ? "active" : ""}`}
+              onClick={() => goTo("dashboard")}
+            >
+              Dashboard
+            </button>
+
+            <button
+              className={`nav-button ${activePage === "history" ? "active" : ""}`}
+              onClick={() => goTo("history")}
+            >
+              Logged History
+            </button>
+
+            <button
+              className={`nav-button ${activePage === "contact" ? "active" : ""}`}
+              onClick={() => goTo("contact")}
+            >
+              Contact Us
+            </button>
+
+            <button
+              className={`nav-button ${activePage === "about" ? "active" : ""}`}
+              onClick={() => goTo("about")}
+            >
+              About Us
+            </button>
+          </nav>
+
+          <div className="sidebar-footer">
+            <button className="nav-button nav-button-danger" onClick={signOut}>
+              Sign Out
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <nav className="sidebar-nav">
+            <button
+              className={`nav-button ${activePage === "about" ? "active" : ""}`}
+              onClick={() => goTo("about")}
+            >
+              About Us
+            </button>
+          </nav>
+        </>
+      )}
+    </aside>
   );
 }
