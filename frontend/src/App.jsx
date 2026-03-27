@@ -51,14 +51,22 @@ export default function App() {
   }, []);
 
   async function signUp() {
-    setMsg("");
-    const { error } = await supabase.auth.signUp({ email, password });
+  setMsg("");
 
-    if (error) {
-      setMsg(error.message);
-    } else {
-      setMsg("Sign-up success. Check your email to confirm (if enabled).");
-    }
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+
+  if (error) {
+    setMsg(error.message);
+    return;
+  }
+
+  setMsg("Account created. Please check your email to confirm before signing in.");
+  setPassword("");
+  setPendingComponent("");
+  setShowAuth(true);
   }
 
   async function signIn() {

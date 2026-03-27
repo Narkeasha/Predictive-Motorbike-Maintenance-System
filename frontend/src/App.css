@@ -557,6 +557,36 @@
     width: 100%;
   }
 
+
+  /* SIGN UP BUTTON */  
+
+  .auth-switch-text {
+    margin-top: 4px;
+  }
+
+  .auth-switch-text p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+  }
+
+  .auth-inline-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--accent);
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .auth-inline-button:hover {
+    text-decoration: underline;
+  }
+
+
+  
+
   .page-card {
     padding: 20px;
     border-radius: 20px;
