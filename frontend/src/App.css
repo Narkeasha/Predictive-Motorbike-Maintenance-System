@@ -12,6 +12,18 @@
   --text-main: #111827;
   --text-soft: #6b7280;
 }
+/*FONTSSSS 
+INITIAL ONE BELOW 
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+*/
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
 
 #root {
   min-height: 100vh;
@@ -585,7 +597,78 @@
   }
 
 
-  
+/* SUPPORT PAGE */
+  .support-card {
+    display: grid;
+    gap: 32px;
+  }
+
+  .support-header {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .support-contact-card {
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .support-card-title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-main);
+  }
+
+  .support-card-text {
+    margin-top: 4px;
+  }
+
+
+  .support-card-text,
+  .support-note,
+  .support-disclaimer p {
+    line-height: 1.65; /* slightly tighter than 1.7 */
+    max-width: 640px; /* prevents overly long lines */
+  }
+
+  .support-contact-item {
+    display: grid;
+    gap: 6px;
+    margin: 10px 0 6px; /* better spacing */
+  }
+
+  .support-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-soft);
+  }
+
+  .support-link {
+    color: var(--accent-dark);
+    font-weight: 600;
+    text-decoration: none;
+    word-break: break-word;
+  }
+
+  .support-link:hover {
+    text-decoration: underline;
+  }
+
+  .support-disclaimer {
+    background: #f8fafc;
+    border: 1px solid #dbe3ea;
+    padding: 20px;
+    border-radius: 18px;
+  }
+/*SUPPORT PAGE END */
+
+
+
+
 
   .page-card {
     padding: 20px;
@@ -645,3 +728,4 @@
     padding: 16px;
   }
 }
+

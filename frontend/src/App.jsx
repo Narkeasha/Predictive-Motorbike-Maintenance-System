@@ -204,14 +204,57 @@ export default function App() {
 
     if (activePage === "contact") {
       return (
-        <div className="page-card">
-          <h2 className="section-title">Support</h2>
-          <p className="section-subtitle">
-            Support and contact details can be added here during final refinement.
-          </p>
-        </div>
+        <section className="page-card support-card">
+          <div className="support-header">
+            <h2 className="section-title">Get in touch</h2>
+            <p className="section-subtitle">
+              Have a question, found an issue, or want to share feedback? You can
+              contact me using the details below.
+            </p>
+          </div>
+
+          <div className="support-contact-card">
+            <h3 className="support-card-title">Contact details</h3>
+
+            <p className="support-card-text">
+              For questions about the system, feedback, or bug reports, please
+              reach out via email:
+            </p>
+
+            <div className="support-contact-item">
+              <span className="support-label">Email</span>
+              <a
+                href="mailto:s4216385@lsbu.ac.uk"
+                className="support-link"
+              >
+                : s4216385@lsbu.ac.uk
+              </a>
+            </div>
+
+            <p className="support-note">
+              This is a student project, so response times may vary.
+            </p>
+          </div>
+
+          <div className="support-disclaimer">
+            <h3 className="support-card-title">Important notice</h3>
+            <p>
+              This system provides general maintenance guidance and estimated
+              predictions only. It should not be treated as professional mechanical
+              advice or a substitute for regular safety checks. If your bike shows
+              serious faults or safety-critical issues, you should seek advice from
+              a qualified mechanic or appropriate professional.
+            </p>
+          </div>
+        </section>
       );
     }
+
+
+
+
+
+
 
     if (selectedComponent) {
       return renderSelectedComponentForm();
