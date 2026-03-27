@@ -1,30 +1,73 @@
 export default function AboutPage() {
   return (
-    <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
-      <h2>About Us</h2>
-      <p>
-        The Motorbike Predictive Maintenance System is designed to support riders
-        in identifying potential maintenance issues before they become critical.
+    <section className="page-card">
+      <p className="eyebrow">About</p>
+      <h2 className="section-title">About Us</h2>
+
+      <p className="section-subtitle">
+        This system was developed to make maintenance easier to manage. Instead
+        of using fixed intervals or requiring expensive sensors, it uses your
+        riding data to estimate when key components may need attention.
       </p>
-      <p>
-        The system combines machine learning models and rule-based logic to assess
-        the condition of important motorbike components and return simple maintenance
-        guidance through the frontend interface.
-      </p>
-      <p>The system supports prediction and maintenance recommendations for:</p>
-      <ul>
-        <li>Engine Oil</li>
-        <li>Tyre</li>
-        <li>Brakes</li>
-        <li>Chain</li>
-        <li>Brake Fluid</li>
-        <li>Coolant</li>
-      </ul>
-      <p>
-        The main goal of the system is to provide users with an accessible way to
-        enter maintenance-related data and receive a clear result in the form of:
-        <b> Safe</b>, <b>Warning</b>, or <b>Critical</b>.
-      </p>
-    </div>
+
+      <div className="content-stack">
+        <div className="about-block">
+          <p>
+            We aim to solve a common problem: many riders struggle to keep track
+            of maintenance, which can lead to costly repairs or even safety
+            risks. Our system helps you stay on top of your motorbike’s
+            condition by providing guidance on when key components may need
+            attention, helping you save money and ride more safely.
+          </p>
+        </div>
+
+        <div className="about-block">
+          <h3 className="section-title">What we do</h3>
+          <p>
+            Our platform uses your riding data to estimate wear on important
+            components such as:
+          </p>
+
+          <ul className="feature-grid">
+            <li>Engine Oil</li>
+            <li>Tyre</li>
+            <li>Brakes</li>
+            <li>Chain</li>
+            <li>Brake Fluid</li>
+            <li>Coolant</li>
+          </ul>
+
+          <p>
+            The main goal of the system is to provide users with an accessible
+            way to enter maintenance-related data and receive a clear result in
+            the form of: <b>Safe</b>, <b>Warning</b>, or <b>Critical</b>.
+          </p>
+        </div>
+
+        <div className="about-block">
+          <h3 className="section-title">Who it’s for</h3>
+          <ul className="feature-list">
+            <li>Everyday commuters who rely on their bike daily</li>
+            <li>
+              Motorcycle enthusiasts who want better insight into their bike’s
+              condition
+            </li>
+          </ul>
+          <p>
+            Whether you ride casually or frequently, the goal is to make
+            maintenance easier to understand and manage.
+          </p>
+        </div>
+
+        <div className="about-block">
+          <h3 className="section-title">Important notice</h3>
+          <p>
+            This system is designed to provide guidance and estimates only. It
+            should not replace professional mechanical advice or regular safety
+            checks.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
