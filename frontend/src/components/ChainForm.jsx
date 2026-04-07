@@ -77,9 +77,9 @@ export default function ChainForm({ onBack }) {
             value={maintenanceFrequency}
             onChange={(e) => setMaintenanceFrequency(e.target.value)}
           >
-            <option value="regular">regular</option>
-            <option value="occasional">occasional</option>
-            <option value="rare">rare</option>
+            <option value="regular">often</option>
+            <option value="occasional">sometimes</option>
+            <option value="rare">rarely</option>
           </select>
         </div>
 

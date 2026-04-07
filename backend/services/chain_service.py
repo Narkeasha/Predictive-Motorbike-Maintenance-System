@@ -12,7 +12,7 @@ def predict_chain(data):
     mileage = data.miles_since_chain_change
 
     # safety override
-    if mileage >= 5000:
+    if mileage >= 15000:
         return {
             "status": "Critical",
             "recommendation": "Chain likely worn out. Replace immediately to avoid failure."

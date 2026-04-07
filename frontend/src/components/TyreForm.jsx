@@ -79,8 +79,8 @@ export default function TyreForm({ onBack }) {
             value={roadType}
             onChange={(e) => setRoadType(e.target.value)}
           >
-            <option value="city">city</option>
-            <option value="highway">highway</option>
+            <option value="city">urban</option>
+            <option value="highway">smooth</option>
             <option value="rough">rough</option>
           </select>
         </div>

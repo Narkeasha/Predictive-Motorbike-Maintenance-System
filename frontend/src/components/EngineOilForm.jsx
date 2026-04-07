@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { predictEngineOil } from "../services/api";
 import PredictionResult from "./PredictionResult";
+import { supabase } from "../supabaseClient";
 
 export default function EngineOilForm({ onBack }) {
   const [milesSinceOilChange, setMilesSinceOilChange] = useState("");
@@ -17,14 +18,40 @@ export default function EngineOilForm({ onBack }) {
     setError("");
     setResult(null);
 
+    const formInputs = {
+      miles_since_oil_change: Number(milesSinceOilChange),
+      trip_type: tripType,
+      riding_style: ridingStyle,
+    };
+
     try {
-      const response = await predictEngineOil({
-        miles_since_oil_change: Number(milesSinceOilChange),
-        trip_type: tripType,
-        riding_style: ridingStyle,
-      });
+      const response = await predictEngineOil(formInputs);
 
       setResult(response);
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error("Could not get current user:", userError.message);
+      } else if (user) {
+        const { error: insertError } = await supabase
+          .from("maintenance_records")
+          .insert([
+            {
+              user_id: user.id,
+              component: "Engine Oil",
+              inputs: formInputs,
+              outputs: response,
+            },
+          ]);
+
+        if (insertError) {
+          console.error("Failed to save prediction history:", insertError.message);
+        }
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {

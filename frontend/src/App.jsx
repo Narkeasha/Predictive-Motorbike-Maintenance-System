@@ -14,6 +14,8 @@ import BrakesForm from "./components/BrakesForm";
 import ChainForm from "./components/ChainForm";
 import BrakeFluidForm from "./components/BrakeFluidForm";
 import CoolantForm from "./components/CoolantForm";
+import HistoryPage from "./components/HistoryPage";
+
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -192,14 +194,7 @@ export default function App() {
     }
 
     if (activePage === "history") {
-      return (
-        <div className="page-card">
-          <h2 className="section-title">Logged History</h2>
-          <p className="section-subtitle">
-            Prediction history will be added sooonnn.
-          </p>
-        </div>
-      );
+      return <HistoryPage />;
     }
 
     if (activePage === "contact") {
