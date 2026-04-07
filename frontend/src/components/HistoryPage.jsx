@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
-export default function HistoryPage() {
+export default function HistoryPage({ onOpenPrediction }) {
   const [records, setRecords] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [showFullHistory, setShowFullHistory] = useState(false);
@@ -52,6 +52,10 @@ export default function HistoryPage() {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
+  function formatValue(value) {
+    return String(value).replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
   const latestByComponent = {};
   records.forEach((record) => {
     if (!latestByComponent[record.component]) {
@@ -99,7 +103,7 @@ export default function HistoryPage() {
     );
   }
 
-  // LEVEL 3 placeholder for later
+  // LEVEL 3 – full component history
   if (showFullHistory && selectedComponent) {
     return (
       <div className="page-card">
@@ -128,14 +132,17 @@ export default function HistoryPage() {
             >
               <p><strong>Date:</strong> {formatDate(record.created_at)}</p>
               <p><strong>Status:</strong> {record.outputs?.status}</p>
-              <p><strong>Recommendation:</strong> {record.outputs?.recommendation}</p>
+              <p>
+                <strong>Recommendation:</strong>{" "}
+                {record.outputs?.recommendation}
+              </p>
 
               <div style={{ marginTop: "12px" }}>
                 <strong>Inputs:</strong>
-                <ul style={{ marginTop: "8px" }}>
+                <ul style={{ marginTop: "8px", paddingLeft: "18px" }}>
                   {Object.entries(record.inputs || {}).map(([key, value]) => (
                     <li key={key}>
-                      {formatLabel(key)}: {String(value)}
+                      {formatLabel(key)}: {formatValue(value)}
                     </li>
                   ))}
                 </ul>
@@ -157,7 +164,7 @@ export default function HistoryPage() {
     );
   }
 
-  // LEVEL 2
+  // LEVEL 2 – latest component summary
   if (selectedComponent && latestRecord) {
     return (
       <div className="page-card">
@@ -184,17 +191,24 @@ export default function HistoryPage() {
 
           <div style={{ marginTop: "16px" }}>
             <strong>Inputs:</strong>
-            <ul style={{ marginTop: "8px" }}>
+            <ul style={{ marginTop: "8px", paddingLeft: "18px" }}>
               {Object.entries(latestRecord.inputs || {}).map(([key, value]) => (
                 <li key={key}>
-                  {formatLabel(key)}: {String(value)}
+                  {formatLabel(key)}: {formatValue(value)}
                 </li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div style={{ marginTop: "20px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
+          }}
+        >
           <button
             className="secondary-action-button"
             type="button"
@@ -214,7 +228,7 @@ export default function HistoryPage() {
           <button
             className="primary-button"
             type="button"
-            onClick={() => alert("Next step: link this button to the dashboard component form.")}
+            onClick={() => onOpenPrediction?.(selectedComponent)}
           >
             Make New Prediction
           </button>
@@ -223,7 +237,7 @@ export default function HistoryPage() {
     );
   }
 
-  // level 1 summaryyyy
+  // LEVEL 1 – overview
   return (
     <div className="page-card">
       <h2 className="section-title">Maintenance History</h2>
@@ -246,7 +260,10 @@ export default function HistoryPage() {
               cursor: "pointer",
               backgroundColor: "#fff",
             }}
-            onClick={() => setSelectedComponent(record.component)}
+            onClick={() => {
+              setSelectedComponent(record.component);
+              setShowFullHistory(false);
+            }}
           >
             <h3 style={{ margin: "0 0 8px 0" }}>{record.component}</h3>
             <p style={{ margin: 0 }}>

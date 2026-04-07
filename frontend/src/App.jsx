@@ -194,7 +194,14 @@ export default function App() {
     }
 
     if (activePage === "history") {
-      return <HistoryPage />;
+      return (
+        <HistoryPage
+          onOpenPrediction={(component) => {
+            setSelectedComponent(component);
+            setActivePage("dashboard");
+          }}
+        />
+      );
     }
 
     if (activePage === "contact") {
