@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { predictChain } from "../services/api";
 import PredictionResult from "./PredictionResult";
+import { supabase } from "../supabaseClient";
 
 export default function ChainForm({ onBack }) {
   const [milesSinceChainChange, setMilesSinceChainChange] = useState("");
@@ -17,14 +18,40 @@ export default function ChainForm({ onBack }) {
     setError("");
     setResult(null);
 
+    const formInputs = {
+      miles_since_chain_change: Number(milesSinceChainChange),
+      weather_exposure: weatherExposure,
+      maintenance_frequency: maintenanceFrequency,
+    };
+
     try {
-      const response = await predictChain({
-        miles_since_chain_change: Number(milesSinceChainChange),
-        weather_exposure: weatherExposure,
-        maintenance_frequency: maintenanceFrequency,
-      });
+      const response = await predictChain(formInputs);
 
       setResult(response);
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error("Could not get current user:", userError.message);
+      } else if (user) {
+        const { error: insertError } = await supabase
+          .from("maintenance_records")
+          .insert([
+            {
+              user_id: user.id,
+              component: "Chain",
+              inputs: formInputs,
+              outputs: response,
+            },
+          ]);
+
+        if (insertError) {
+          console.error("Failed to save prediction history:", insertError.message);
+        }
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {

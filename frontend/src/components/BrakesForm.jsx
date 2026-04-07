@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { predictBrakes } from "../services/api";
 import PredictionResult from "./PredictionResult";
+import { supabase } from "../supabaseClient";
 
 export default function BrakesForm({ onBack }) {
   const [milesSincePadChange, setMilesSincePadChange] = useState("");
@@ -17,14 +18,40 @@ export default function BrakesForm({ onBack }) {
     setError("");
     setResult(null);
 
+    const formInputs = {
+      miles_since_pad_change: Number(milesSincePadChange),
+      riding_style: ridingStyle,
+      city_riding: cityRiding,
+    };
+
     try {
-      const response = await predictBrakes({
-        miles_since_pad_change: Number(milesSincePadChange),
-        riding_style: ridingStyle,
-        city_riding: cityRiding,
-      });
+      const response = await predictBrakes(formInputs);
 
       setResult(response);
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error("Could not get current user:", userError.message);
+      } else if (user) {
+        const { error: insertError } = await supabase
+          .from("maintenance_records")
+          .insert([
+            {
+              user_id: user.id,
+              component: "Brakes",
+              inputs: formInputs,
+              outputs: response,
+            },
+          ]);
+
+        if (insertError) {
+          console.error("Failed to save prediction history:", insertError.message);
+        }
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {

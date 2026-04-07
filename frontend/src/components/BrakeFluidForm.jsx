@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { predictBrakeFluid } from "../services/api";
 import PredictionResult from "./PredictionResult";
+import { supabase } from "../supabaseClient";
 
 export default function BrakeFluidForm({ onBack }) {
   const [dateLastBrakeFluidChange, setDateLastBrakeFluidChange] = useState("");
@@ -14,12 +15,38 @@ export default function BrakeFluidForm({ onBack }) {
     setError("");
     setResult(null);
 
+    const formInputs = {
+      date_last_brake_fluid_change: dateLastBrakeFluidChange,
+    };
+
     try {
-      const response = await predictBrakeFluid({
-        date_last_brake_fluid_change: dateLastBrakeFluidChange,
-      });
+      const response = await predictBrakeFluid(formInputs);
 
       setResult(response);
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error("Could not get current user:", userError.message);
+      } else if (user) {
+        const { error: insertError } = await supabase
+          .from("maintenance_records")
+          .insert([
+            {
+              user_id: user.id,
+              component: "Brake Fluid",
+              inputs: formInputs,
+              outputs: response,
+            },
+          ]);
+
+        if (insertError) {
+          console.error("Failed to save prediction history:", insertError.message);
+        }
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {

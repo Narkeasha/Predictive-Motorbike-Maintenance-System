@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { predictCoolant } from "../services/api";
 import PredictionResult from "./PredictionResult";
+import { supabase } from "../supabaseClient";
 
 export default function CoolantForm({ onBack }) {
   const [dateLastCoolantChange, setDateLastCoolantChange] = useState("");
@@ -14,12 +15,38 @@ export default function CoolantForm({ onBack }) {
     setError("");
     setResult(null);
 
+    const formInputs = {
+      date_last_coolant_change: dateLastCoolantChange,
+    };
+
     try {
-      const response = await predictCoolant({
-        date_last_coolant_change: dateLastCoolantChange,
-      });
+      const response = await predictCoolant(formInputs);
 
       setResult(response);
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error("Could not get current user:", userError.message);
+      } else if (user) {
+        const { error: insertError } = await supabase
+          .from("maintenance_records")
+          .insert([
+            {
+              user_id: user.id,
+              component: "Coolant",
+              inputs: formInputs,
+              outputs: response,
+            },
+          ]);
+
+        if (insertError) {
+          console.error("Failed to save prediction history:", insertError.message);
+        }
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {

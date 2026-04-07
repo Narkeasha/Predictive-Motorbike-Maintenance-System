@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { predictTyre } from "../services/api";
 import PredictionResult from "./PredictionResult";
+import { supabase } from "../supabaseClient";
 
 export default function TyreForm({ onBack }) {
   const [mileageSinceTyreChange, setMileageSinceTyreChange] = useState("");
   const [ridingStyle, setRidingStyle] = useState("normal");
-  const [roadType, setRoadType] = useState("city");
+  const [roadType, setRoadType] = useState("urban");
 
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,14 +18,40 @@ export default function TyreForm({ onBack }) {
     setError("");
     setResult(null);
 
+    const formInputs = {
+      mileage_since_tyre_change: Number(mileageSinceTyreChange),
+      riding_style: ridingStyle,
+      road_type: roadType,
+    };
+
     try {
-      const response = await predictTyre({
-        mileage_since_tyre_change: Number(mileageSinceTyreChange),
-        riding_style: ridingStyle,
-        road_type: roadType,
-      });
+      const response = await predictTyre(formInputs);
 
       setResult(response);
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        console.error("Could not get current user:", userError.message);
+      } else if (user) {
+        const { error: insertError } = await supabase
+          .from("maintenance_records")
+          .insert([
+            {
+              user_id: user.id,
+              component: "Tyre",
+              inputs: formInputs,
+              outputs: response,
+            },
+          ]);
+
+        if (insertError) {
+          console.error("Failed to save prediction history:", insertError.message);
+        }
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -79,8 +106,8 @@ export default function TyreForm({ onBack }) {
             value={roadType}
             onChange={(e) => setRoadType(e.target.value)}
           >
-            <option value="city">urban</option>
-            <option value="highway">smooth</option>
+            <option value="urban">urban</option>
+            <option value="smooth">smooth</option>
             <option value="rough">rough</option>
           </select>
         </div>
