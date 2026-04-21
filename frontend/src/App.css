@@ -1,4 +1,5 @@
 :root {
+  /* -------------------- colour vairables-------------------- */
   --accent: #355a6a;
   --accent-dark: #2a3f4f;
   --accent-soft: #afc2cc;
@@ -20,21 +21,25 @@ body {
 
 */
 
+/* -------------------- global font------------------- */
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-
+/*app root fills full screen heighy*/
 #root {
   min-height: 100vh;
 }
 
+
+/* -------------------- colour vairables-------------------- */
 .app-page {
   min-height: 100vh;
   padding: 16px;
   background: linear-gradient(180deg, #e3e9ef 0%, #cad8d8 100%);
 }
 
+/*main page background*/
 .app-frame {
   min-height: calc(100vh - 32px);
   max-width: 1480px;
@@ -48,6 +53,7 @@ body {
   grid-template-columns: 220px 1fr;
 }
 
+/* --------------------side bar------------------- */
 .sidebar {
   background: transparent;
   border-right: 1px solid var(--border-soft);
@@ -57,6 +63,7 @@ body {
   gap: 20px;
 }
 
+/*logo and title section*/
 .sidebar-brand {
   display: flex;
   align-items: center;
@@ -64,6 +71,7 @@ body {
   padding-bottom: 6px;
 }
 
+/* little logo box */
 .brand-badge {
   width: 40px;
   height: 40px;
@@ -76,6 +84,7 @@ body {
   font-size: 0.92rem;
 }
 
+/* sidebar title text */
 .sidebar-title {
   margin: 0;
   font-size: 1rem;
@@ -89,6 +98,7 @@ body {
   color: var(--text-soft);
 }
 
+/* signed in user box */
 .sidebar-user {
   background: rgba(255, 255, 255, 0.78);
   border: 1px solid var(--border-soft);
@@ -111,15 +121,23 @@ body {
   word-break: break-word;
 }
 
+/* nav button layout */
 .sidebar-nav {
   display: grid;
   gap: 8px;
 }
 
+/* pushes footer to bottom */
 .sidebar-footer {
   margin-top: auto;
 }
 
+
+
+
+
+
+/* -------------------navigation buttons------------------ */
 .nav-button {
   width: 100%;
   text-align: left;
@@ -132,22 +150,30 @@ body {
   transition: all 0.2s ease;
 }
 
+/* hover style */
 .nav-button:hover {
   background: var(--accent-soft);
   color: var(--accent-dark);
 }
 
+/* active page style */
 .nav-button.active {
   background: var(--accent-soft);
   color: var(--accent-dark);
   border-color: var(--accent-soft-border);
 }
 
+
+/* sign out hover style */
 .nav-button-danger:hover {
   background: #afc2cc;
   color: #dc2626;
 }
 
+
+
+
+/* --------------------------main content area------------------ */
 .main-content {
   padding: 32px;
   display: flex;
@@ -156,6 +182,7 @@ body {
   min-width: 0;
 }
 
+/* top bar layout */
 .page-topbar {
   display: flex;
   justify-content: space-between;
@@ -181,6 +208,7 @@ body {
   min-width: 110px;
 }
 
+/* signed in badge */
 .signed-in-badge {
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--border-soft);
@@ -205,6 +233,9 @@ body {
   word-break: break-word;
 }
 
+
+
+/* -------------------------headings + text------------------ */
 .eyebrow {
   margin: 0;
   font-size: 0.8rem;
@@ -229,6 +260,7 @@ body {
   font-size: 0.98rem;
 }
 
+/* reus,able card style */
 .page-card {
   background: var(--bg-card);
   border: 1px solid var(--border-soft);
@@ -238,6 +270,10 @@ body {
   min-width: 0;
 }
 
+
+
+
+/* -----------------------landing page------------------ */
 .landing-stack {
   display: grid;
   gap: 24px;
@@ -272,6 +308,7 @@ body {
   color: var(--text-soft);
 }
 
+/* shared section layout */
 .landing-section,
 .dashboard-header,
 .auth-header,
@@ -299,6 +336,11 @@ body {
   text-align: center;
 }
 
+
+
+
+
+/* -----------------------component button grid----------------- */
 .component-grid {
   margin-top: 24px;
   display: grid;
@@ -306,6 +348,7 @@ body {
   gap: 16px;
 }
 
+/* individual component tile */
 .component-tile {
   min-height: 110px;
   border-radius: 18px;
@@ -321,6 +364,7 @@ body {
   color: var(--text-main);
 }
 
+/* hover effect */
 .component-tile:hover {
   border-color: var(--accent-soft-border);
   background: #d7e4eb;
@@ -328,6 +372,7 @@ body {
   box-shadow: 0 10px 24px var(--accent-shadow);
 }
 
+/* selected tile */
 .component-tile.selected {
   border-color: var(--accent-soft-border);
   background: var(--accent-soft);
@@ -339,6 +384,10 @@ body {
   line-height: 1.4;
 }
 
+
+
+
+/* -----------------------button groups----------------- */
 .hero-actions,
 .auth-actions,
 .prediction-actions {
@@ -348,6 +397,7 @@ body {
   gap: 12px;
 }
 
+/* shared button look */
 .primary-button,
 .secondary-button,
 .ghost-button,
@@ -359,6 +409,7 @@ body {
   transition: all 0.2s ease;
 }
 
+/* main action button */
 .primary-button {
   background: var(--accent);
   border: 1px solid var(--accent);
@@ -370,6 +421,7 @@ body {
   border-color: var(--accent-dark);
 }
 
+/* secondary buttons */
 .secondary-button,
 .secondary-action-button {
   background: #ffffff;
@@ -382,6 +434,7 @@ body {
   background: #f9fafb;
 }
 
+/* subtle button */
 .ghost-button {
   background: transparent;
   border: 1px solid transparent;
@@ -392,6 +445,11 @@ body {
   background: #f9fafb;
 }
 
+
+
+
+
+/* ---------------------------forms-------------------------- */
 .auth-card {
   max-width: 760px;
 }
@@ -415,6 +473,7 @@ body {
   color: var(--text-main);
 }
 
+/* inputs and dropdowns */
 .text-input,
 .prediction-input,
 .prediction-select {
@@ -428,6 +487,7 @@ body {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* input focus effect */
 .text-input:focus,
 .prediction-input:focus,
 .prediction-select:focus {
@@ -446,6 +506,7 @@ body {
   max-width: 560px;
 }
 
+/* error message box */
 .form-error {
   margin-top: 20px;
   border: 1px solid #fecaca;
@@ -464,6 +525,10 @@ body {
   max-width: 900px;
 }
 
+
+
+
+/* ---------------------------about section-------------------------- */
 .content-stack p {
   margin: 0;
   line-height: 1.7;
@@ -481,6 +546,7 @@ body {
   margin-top: 8px;
 }
 
+/* list layout */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -493,6 +559,8 @@ body {
   line-height: 1.6;
   color: #374151;
 }
+
+/* duplicate subtitle style */
 .section-subtitle {
   margin: 0;
   color: var(--text-soft);
@@ -501,6 +569,7 @@ body {
   max-width: 880px;
 }
 
+/* --------------------------tablet responsive-------------------------- */
 @media (max-width: 1024px) {
   .app-page {
     padding: 12px;
@@ -521,6 +590,7 @@ body {
   }
 }
 
+/* ---------------------------phone responsive-------------------------- */
 @media (max-width: 768px) {
   .app-page {
     padding: 0;
@@ -529,7 +599,7 @@ body {
   .app-frame {
     min-height: 100vh;
     border-radius: 0;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* sidebar stacks on top */
   }
 
   .sidebar {
@@ -570,8 +640,7 @@ body {
   }
 
 
-  /* SIGN UP BUTTON */  
-
+  /*------------------ sing up button section-----------------*/  
   .auth-switch-text {
     margin-top: 4px;
   }
@@ -597,7 +666,7 @@ body {
   }
 
 
-/* SUPPORT PAGE */
+/* ---------------------------support page------------------*/
   .support-card {
     display: grid;
     gap: 32px;
@@ -664,12 +733,8 @@ body {
     padding: 20px;
     border-radius: 18px;
   }
-/*SUPPORT PAGE END */
 
-
-
-
-
+ /*---------------- card + text adjustments for mobile-------------------- */
   .page-card {
     padding: 20px;
     border-radius: 20px;
@@ -711,6 +776,7 @@ body {
   }
 }
 
+/* ------------------small mobiless----------------- */
 @media (max-width: 480px) {
   .app-title {
     font-size: 1.7rem;
@@ -727,5 +793,112 @@ body {
   .page-card {
     padding: 16px;
   }
+  
 }
+ /* -----------------info button - pop up---------------- */
+.field-label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.field-label-row label {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.info-button-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* small icon button */
+.info-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  color: #64748b;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.info-button:hover {
+  color: var(--accent-dark);
+  transform: scale(1.05);
+  background: transparent;
+}
+
+.info-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* popup box */
+.info-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: 340px;
+  background: #ffffff;
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.10);
+  padding: 14px 16px;
+}
+
+/* little arrow on popup */
+.info-popup::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 14px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-left: 1px solid rgba(203, 213, 225, 0.8);
+  border-top: 1px solid rgba(203, 213, 225, 0.8);
+  transform: rotate(45deg);
+}
+
+.info-popup-content {
+  display: grid;
+  gap: 10px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.info-popup-content p {
+  margin: 0;
+}
+
+.info-popup-content strong {
+  color: var(--text-main);
+}
+
+/* smaller popup on mobile */
+@media (max-width: 768px) {
+  .info-popup {
+    width: min(300px, 78vw);
+  }
+}
+
+
+
 

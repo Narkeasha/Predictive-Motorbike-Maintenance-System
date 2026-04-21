@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 import "./App.css";
 
+// import all page/components used in the app
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/dashboard";
 import AboutPage from "./components/aboutpage";
@@ -16,19 +17,23 @@ import BrakeFluidForm from "./components/BrakeFluidForm";
 import CoolantForm from "./components/CoolantForm";
 import HistoryPage from "./components/HistoryPage";
 
-
+// main app component
 export default function App() {
+  // -------------------authentication and user state-----------------.
   const [session, setSession] = useState(null);
 
+  // -------------------authentication form inputs-----------------.
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
 
+  // -------------------page + navigation state-----------------.
   const [activePage, setActivePage] = useState("home");
   const [selectedComponent, setSelectedComponent] = useState("");
   const [pendingComponent, setPendingComponent] = useState("");
   const [showAuth, setShowAuth] = useState(false);
 
+  // list of maintenance compoents
   const components = [
     "Engine Oil",
     "Tyre",
@@ -38,47 +43,56 @@ export default function App() {
     "Coolant",
   ];
 
+  // -------------------check login status when app loasd-----------------.
   useEffect(() => {
+    //gets session when app starts
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
     });
 
+    //list for ligin/logout changes.
     const { data: sub } = supabase.auth.onAuthStateChange(
       (_event, newSession) => {
         setSession(newSession);
       }
     );
 
+    //cleanign up listener when component is unmounted
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  // -------------------sign up function-----------------.
   async function signUp() {
-  setMsg("");
+  setMsg(""); //clearing old mesages
 
   const { error } = await supabase.auth.signUp({
     email,
     password,
   });
 
+  //if singup failss
   if (error) {
     setMsg(error.message);
     return;
   }
 
+  //if singup works
   setMsg("Account created. Please check your email to confirm before signing in.");
-  setPassword("");
-  setPendingComponent("");
-  setShowAuth(true);
+  setPassword(""); //clearing pw field
+  setPendingComponent(""); //clear saved components
+  setShowAuth(true); //stay on auth screen
   }
 
+  // -------------------sign in function-----------------.
   async function signIn() {
-    setMsg("");
+    setMsg(""); //clearing old mesasages
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
+    //if login works
     if (error) {
       setMsg(error.message);
       return;
@@ -88,6 +102,8 @@ export default function App() {
     setSession(newSession);
     setMsg("Signed in.");
 
+    //if user chose a component before login in
+    //take straight to chosen component/
     if (pendingComponent) {
       setSelectedComponent(pendingComponent);
       setPendingComponent("");
@@ -97,9 +113,11 @@ export default function App() {
       setActivePage("dashboard");
     }
 
-    setShowAuth(false);
+    setShowAuth(false); //hide auth form
   }
 
+
+  // -------------------sign out function-----------------.
   async function signOut() {
     await supabase.auth.signOut();
     setSession(null);
@@ -110,31 +128,36 @@ export default function App() {
     setMsg("Signed out.");
   }
 
+  // -------------------user clicked get started----------------.
   function handleGetStarted() {
-    setPendingComponent("");
-    setShowAuth(true);
+    setPendingComponent(""); //no svaed compnenent
+    setShowAuth(true); //show auth form
     setActivePage("home");
     setMsg("");
   }
 
+  //-------------------user selected component from landing page-----------------.
   function handlePublicComponentSelect(component) {
-    setPendingComponent(component);
-    setShowAuth(true);
+    setPendingComponent(component); //remember chosen component
+    setShowAuth(true); //ask user to sign in first
     setActivePage("home");
     setMsg("");
   }
 
+  // -----------------back to dashboard---------------.
   function handleBackToDashboard() {
     setSelectedComponent("");
     setActivePage("dashboard");
   }
 
+  // -------------------go back from auth screen-----------------.
   function handleBackFromAuth() {
     setShowAuth(false);
     setPendingComponent("");
     setMsg("");
   }
 
+  // -------------------shwo valid form for selected component.-----------------.
   function renderSelectedComponentForm() {
     if (selectedComponent === "Engine Oil") {
       return <EngineOilForm onBack={handleBackToDashboard} />;
@@ -163,7 +186,9 @@ export default function App() {
     return null;
   }
 
+  // ------------------what the users sees wihtout being logged in-----------------.
   function renderPublicContent() {
+    //if authentication form should be shown
     if (showAuth) {
       return (
         <AuthForm
@@ -179,6 +204,7 @@ export default function App() {
       );
     }
 
+    // otherwise show landing page
     return (
       <LandingPage
         components={components}
@@ -188,11 +214,15 @@ export default function App() {
     );
   }
 
+  
+   // ------------------what the users sees being logged in-----------------.
   function renderPrivateContent() {
+     // about page
     if (activePage === "about") {
       return <AboutPage />;
     }
 
+    //history page
     if (activePage === "history") {
       return (
         <HistoryPage
@@ -204,6 +234,7 @@ export default function App() {
       );
     }
 
+    //contact page
     if (activePage === "contact") {
       return (
         <section className="page-card support-card">
@@ -252,16 +283,12 @@ export default function App() {
       );
     }
 
-
-
-
-
-
-
+    //if user picks componetn show that form
     if (selectedComponent) {
       return renderSelectedComponentForm();
     }
 
+    //default loggied in page is the dashboard
     return (
       <Dashboard
         components={components}
@@ -271,9 +298,11 @@ export default function App() {
     );
   }
 
+   //------------------------main UI-------------------------.
   return (
     <div className="app-page">
       <div className="app-frame">
+        {/* left sidebar */}
         <Sidebar
           isAuthenticated={!!session}
           userEmail={session?.user?.email ?? ""}
@@ -284,14 +313,18 @@ export default function App() {
           setSelectedComponent={setSelectedComponent}
         />
 
+        {/* main page content */}
         <main className="main-content">
           <div className="page-topbar">
+            
+            {/* app heading */}
             <div className="page-header">
               <p className="eyebrow">Motorbike Predictive Maintenance Platform</p>
               <h1 className="app-title">Motorbike Predictive Maintenance System</h1>
               {msg && <p className="status-message">{msg}</p>}
             </div>
 
+            {/* top right sign in or user email */}
             <div className="topbar-account">
               {!session ? (
                 <button

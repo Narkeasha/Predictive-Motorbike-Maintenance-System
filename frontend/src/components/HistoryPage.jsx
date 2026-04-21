@@ -2,46 +2,54 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
 export default function HistoryPage({ onOpenPrediction }) {
+  //--------------------state - what we need to stroe in memory--------.
   const [records, setRecords] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [showFullHistory, setShowFullHistory] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  //---------------fetching hisotry from supbase component-------.
   useEffect(() => {
     async function fetchHistory() {
       setLoading(true);
       setError("");
 
+      // get logged-in user
       const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();
 
+      // if can't get user -> stop
       if (userError) {
         setError("Could not get user");
         setLoading(false);
         return;
       }
 
+      // get this user's history from database
       const { data, error } = await supabase
         .from("maintenance_records")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
+      // handle result.
       if (error) {
-        setError("Failed to fetch history");
+        setError("Failed to fetch history"); 
       } else {
-        setRecords(data);
+        setRecords(data); // save history
       }
 
-      setLoading(false);
+      setLoading(false); // done loading
     }
 
     fetchHistory();
-  }, []);
+  }, []); // runs once when page loads
 
+
+  //----------------cleanup and formatting functions------------------.
   function formatDate(dateString) {
     return new Date(dateString).toLocaleString("en-GB");
   }
@@ -56,6 +64,8 @@ export default function HistoryPage({ onOpenPrediction }) {
     return String(value).replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
+//--------------------rendering different levels of history------------------.
+  //latest record per component for overview page
   const latestByComponent = {};
   records.forEach((record) => {
     if (!latestByComponent[record.component]) {
@@ -65,12 +75,14 @@ export default function HistoryPage({ onOpenPrediction }) {
 
   const components = Object.values(latestByComponent);
 
+  //filter history for selected component
   const componentHistory = selectedComponent
     ? records.filter((record) => record.component === selectedComponent)
     : [];
 
   const latestRecord = componentHistory.length > 0 ? componentHistory[0] : null;
 
+  //------------loading and error states------------------.
   if (loading) {
     return (
       <div className="page-card">
@@ -104,6 +116,7 @@ export default function HistoryPage({ onOpenPrediction }) {
   }
 
   // LEVEL 3 – full component history
+  // user clicked "view previous predictions"
   if (showFullHistory && selectedComponent) {
     return (
       <div className="page-card">
@@ -165,6 +178,7 @@ export default function HistoryPage({ onOpenPrediction }) {
   }
 
   // LEVEL 2 – latest component summary
+  // user clicleck a compoenent.
   if (selectedComponent && latestRecord) {
     return (
       <div className="page-card">
@@ -238,6 +252,7 @@ export default function HistoryPage({ onOpenPrediction }) {
   }
 
   // LEVEL 1 – overview
+  //show list of components 
   return (
     <div className="page-card">
       <h2 className="section-title">Maintenance History</h2>

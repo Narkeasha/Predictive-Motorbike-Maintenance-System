@@ -1,10 +1,13 @@
 export default function PredictionResult({ result }) {
+  // if no result yet, show nothing
   if (!result) return null;
 
-  function getStatusColor(status) {
-    if (!status) return "#eee";
 
-    const normalized = status.toLowerCase();
+    // ----------- get backeground colour based on status -----------.
+  function getStatusColor(status) {
+    if (!status) return "#eee";  // default colour
+
+    const normalized = status.toLowerCase(); // make lowercase
 
     if (normalized === "safe") return "#d4edda";
     if (normalized === "warning") return "#fff3cd";
@@ -13,6 +16,7 @@ export default function PredictionResult({ result }) {
     return "#eee";
   }
 
+  // -------------------- UI --------------------
   return (
     <div
       style={{
@@ -31,13 +35,14 @@ export default function PredictionResult({ result }) {
           padding: "10px 16px",
           borderRadius: 8,
           fontWeight: "bold",
-          background: getStatusColor(result.status),
+          background: getStatusColor(result.status), // dynamic colour
           marginBottom: 12,
         }}
       >
         {result.status}
       </div>
 
+      {/* recommendation text */}
       <p>
         <b>Recommendation:</b> {result.recommendation}
       </p>

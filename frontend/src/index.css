@@ -1,4 +1,5 @@
 :root {
+  /* -------------------- global default styles-------------------- */
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   line-height: 1.5;
@@ -11,10 +12,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* apply border-box sizing to everything */
 * {
   box-sizing: border-box;
 }
 
+/* remove default margins and make full-height layout possible */
 html,
 body,
 #root {
@@ -22,17 +25,20 @@ body,
   min-height: 100%;
 }
 
+/* basic body defaults */
 body {
   min-width: 320px;
   background: #eceff3;
   color: #0f172a;
 }
 
+/* links inherit text colour and remove underline */
 a {
   color: inherit;
   text-decoration: none;
 }
 
+/* buttons, inputs, selects, textareas use same font as app */
 button,
 input,
 select,
@@ -40,10 +46,12 @@ textarea {
   font: inherit;
 }
 
+/* show pointer cursor on buttons */
 button {
   cursor: pointer;
 }
 
+/* images stay responsive */
 img {
   max-width: 100%;
   display: block;

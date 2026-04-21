@@ -1,3 +1,7 @@
+# app.py 
+# INITIAL PROTOTYE 
+# standalone backend.
+# doesnt get called or would be uvicorn app:app
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client

@@ -7,11 +7,18 @@ export default function Sidebar({
   setShowAuth,
   setSelectedComponent,
 }) {
+
+
+  // -------------------- nav functions--------------------
   function goTo(page) {
+
+
+    // if user NOT logged in
     if (!isAuthenticated) {
       setActivePage("home");
       setShowAuth(false);
 
+      // scroll to home section
       if (page === "home") {
         setTimeout(() => {
           document
@@ -20,6 +27,7 @@ export default function Sidebar({
         }, 0);
       }
 
+      // scroll to about section
       if (page === "about") {
         setTimeout(() => {
           document
@@ -28,18 +36,22 @@ export default function Sidebar({
         }, 0);
       }
 
-      return;
+      return;  // stop here if not logged in
     }
 
+    // if user is logged in then change page normally
     setActivePage(page);
 
+    // reset selected component when leaving dashboard
     if (page !== "dashboard" && setSelectedComponent) {
       setSelectedComponent("");
     }
   }
 
+    // -------------------- UI --------------------
   return (
     <aside className="sidebar">
+       {/* --------------logo/title--------------- */}
       <div className="sidebar-brand">
         <div className="brand-badge">nk</div>
         <div>
@@ -50,6 +62,8 @@ export default function Sidebar({
         </div>
       </div>
 
+
+      {/* ----------------show email if logged in------ */}
       {isAuthenticated && (
         <div className="sidebar-user">
           <span className="sidebar-user-label">Signed in as</span>
@@ -57,9 +71,13 @@ export default function Sidebar({
         </div>
       )}
 
+
+      {/* -----------------logged in view ------------------ */}
       {isAuthenticated ? (
         <>
           <nav className="sidebar-nav">
+
+            {/* dashboard button */}
             <button
               className={`nav-button ${activePage === "dashboard" ? "active" : ""}`}
               onClick={() => goTo("dashboard")}
@@ -67,6 +85,7 @@ export default function Sidebar({
               Dashboard
             </button>
 
+            {/* history button */}
             <button
               className={`nav-button ${activePage === "history" ? "active" : ""}`}
               onClick={() => goTo("history")}
@@ -74,6 +93,7 @@ export default function Sidebar({
               History
             </button>
 
+           {/* support button */}
             <button
               className={`nav-button ${activePage === "contact" ? "active" : ""}`}
               onClick={() => goTo("contact")}
@@ -81,6 +101,7 @@ export default function Sidebar({
               Support 
             </button>
 
+            {/* about button */}
             <button
               className={`nav-button ${activePage === "about" ? "active" : ""}`}
               onClick={() => goTo("about")}
@@ -89,6 +110,7 @@ export default function Sidebar({
             </button>
           </nav>
 
+          {/* sign out button */}
           <div className="sidebar-footer">
             <button className="nav-button nav-button-danger" onClick={signOut}>
               Sign Out
@@ -96,11 +118,14 @@ export default function Sidebar({
           </div>
         </>
       ) : (
+         // --------------------view when not loggedd in----------------.
         <nav className="sidebar-nav">
+           {/* home button */}
           <button className="nav-button" onClick={() => goTo("home")}>
             Home
           </button>
 
+          {/* about button */}
           <button className="nav-button" onClick={() => goTo("about")}>
             About 
           </button>

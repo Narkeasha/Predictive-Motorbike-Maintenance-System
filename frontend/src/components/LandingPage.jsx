@@ -3,14 +3,20 @@ export default function LandingPage({
   onSelectComponent,
   onGetStarted,
 }) {
+
+   // landing (home) page
   return (
     <div className="landing-stack">
+      {/* ----------- hero main intro---------------- */}
       <section id="home-section" className="page-card landing-card">
         <section className="hero-section">
+
+          {/* big heading */}
           <h2 className="hero-title">
             Stay on top of your bike’s health before issues happen
           </h2>
 
+          {/* short description */}
           <p className="hero-subtitle">
             Track your motorbike usage and receive personalised predictions for
             when key components need attention, helping you avoid breakdowns and
@@ -18,6 +24,7 @@ export default function LandingPage({
           </p>
         </section>
 
+        {/* -------------------- component slection -------------------- */}
         <section className="landing-section">
           <h3 className="section-title centered">
             Select a component to begin
@@ -28,12 +35,13 @@ export default function LandingPage({
             taken through the login flow first.
           </p>
 
+          {/* buttons for each component (engine oil, brakes) */}
           <div className="component-grid">
             {components.map((component) => (
               <button
                 key={component}
                 className="component-tile"
-                onClick={() => onSelectComponent(component)}
+                onClick={() => onSelectComponent(component)} // send selected component
               >
                 <span className="component-tile-label">
                   {component}
@@ -41,7 +49,8 @@ export default function LandingPage({
               </button>
             ))}
           </div>
-
+          
+          {/* main CTA button */}
           <div className="hero-actions">
             <button className="primary-button" onClick={onGetStarted}>
               Get Started
@@ -50,11 +59,12 @@ export default function LandingPage({
         </section>
       </section>
 
-      {/* ABOUT SECTION */}
+      {/* -----------------------------about section ----------------------------------------*/}
       <section id="about-section" className="page-card">
         <p className="eyebrow">About</p>
         <h2 className="section-title">About Us</h2>
-
+        
+        {/* explanation of system */}
         <p className="section-subtitle">
           This system was developed to make maintenance easier to manage. Instead
           of using fixed intervals or requiring expensive sensors, it uses your
@@ -62,6 +72,8 @@ export default function LandingPage({
         </p>
 
         <div className="content-stack">
+
+          {/* problem explanation */}
           <div className="about-block">
             <p>
               We aim to solve a common problem: many riders struggle to keep
@@ -72,6 +84,7 @@ export default function LandingPage({
             </p>
           </div>
 
+          {/* what the system does */}
           <div className="about-block">
             <h3 className="section-title">What we do</h3>
             <p>
@@ -79,6 +92,7 @@ export default function LandingPage({
               components such as:
             </p>
 
+            {/* list of components */}
             <ul className="feature-grid">
                 <li>Engine Oil</li>
                 <li>Tyre</li>
@@ -96,6 +110,7 @@ export default function LandingPage({
             </p>
           </div>
 
+          {/* who it's for */}
           <div className="about-block">
             <h3 className="section-title">Who it’s for</h3>
 
@@ -113,6 +128,7 @@ export default function LandingPage({
             </p>
           </div>
 
+          {/* disclaimer */}
           <div className="about-block">
             <h3 className="section-title">Important notice</h3>
             <p>

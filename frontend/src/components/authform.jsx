@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+// this component handles both sign-in and sign-up UI
+// it receives functions and state from App.jsx (parent component)
 export default function AuthForm({
   email,
   password,
@@ -10,15 +12,20 @@ export default function AuthForm({
   onBack,
   pendingComponent,
 }) {
+
+  // local state to switch between sign-in and sign-up modes
   const [mode, setMode] = useState("signin");
 
+   // helper boolean for cleaner conditional rendering
   const isSignIn = mode === "signin";
 
   return (
     <div className="page-card auth-card">
+      {/* header section */}
       <div className="auth-header">
         <p className="eyebrow">Authentication</p>
 
+        {/* dynamic title dependent o mode and selected component */}
         <h2 className="section-title">
           {isSignIn
             ? pendingComponent
@@ -27,6 +34,7 @@ export default function AuthForm({
             : "Create your account"}
         </h2>
 
+        {/* description changes based on mode */}
         <p className="section-subtitle">
           {isSignIn
             ? "Access the dashboard, open prediction forms, and manage maintenance workflows from one place."
@@ -34,7 +42,11 @@ export default function AuthForm({
         </p>
       </div>
 
+       {/* form inputs */}
       <div className="auth-form-grid">
+
+        {/* email input */}
+         {/* password input */}
         <div className="form-field">
           <label htmlFor="email">Email</label>
           <input
@@ -59,13 +71,17 @@ export default function AuthForm({
           />
         </div>
 
+        {/* action buttons */}
         <div className="auth-actions">
+           {/* SIGN IN MODE */}
           {isSignIn ? (
             <>
+              {/* triggers sign-in function from App.jsx */}
               <button className="primary-button" onClick={signIn}>
                 Sign In
               </button>
 
+              {/* switch to sign-up mode */}
               <button
                 className="secondary-action-button"
                 type="button"
@@ -76,10 +92,12 @@ export default function AuthForm({
             </>
           ) : (
             <>
+               {/* SIGN UP MODE */}
               <button className="primary-button" onClick={signUp}>
                 Create Account
               </button>
 
+               {/* switch back to sign-in mode */}
               <button
                 className="secondary-action-button"
                 type="button"

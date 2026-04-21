@@ -1,16 +1,25 @@
 export default function AboutPage() {
   return (
     <section className="page-card">
+
+      {/* small label at the top */}
       <p className="eyebrow">About</p>
+
+      {/* main heading */}
       <h2 className="section-title">About Us</h2>
 
+
+      {/* short intro description */}
       <p className="section-subtitle">
         This system was developed to make maintenance easier to manage. Instead
         of using fixed intervals or requiring expensive sensors, it uses your
         riding data to estimate when key components may need attention.
       </p>
 
+      {/* main content container */}
       <div className="content-stack">
+
+        {/* problem + purpose */}
         <div className="about-block">
           <p>
             We aim to solve a common problem: many riders struggle to keep track
@@ -21,6 +30,7 @@ export default function AboutPage() {
           </p>
         </div>
 
+        {/* what the system does */}
         <div className="about-block">
           <h3 className="section-title">What we do</h3>
           <p>
@@ -28,6 +38,7 @@ export default function AboutPage() {
             components such as:
           </p>
 
+          {/* list of supported components */}
           <ul className="feature-grid">
             <li>Engine Oil</li>
             <li>Tyre</li>
@@ -37,6 +48,7 @@ export default function AboutPage() {
             <li>Coolant</li>
           </ul>
 
+          {/* explains output format */}
           <p>
             The main goal of the system is to provide users with an accessible
             way to enter maintenance-related data and receive a clear result in
@@ -44,6 +56,7 @@ export default function AboutPage() {
           </p>
         </div>
 
+         {/* target audience */}
         <div className="about-block">
           <h3 className="section-title">Who it’s for</h3>
           <ul className="feature-list">
@@ -59,6 +72,7 @@ export default function AboutPage() {
           </p>
         </div>
 
+        {/* short disclaimer */}
         <div className="about-block">
           <h3 className="section-title">Important notice</h3>
           <p>
